@@ -15,8 +15,15 @@ def profile(request, player_id):
 
 def match(request, match_id, wht_id, blk_id):
     context = {
-        'match_id' : 1,
-        'wht_id' : 1,
-        'blk_id' : 1,
+        'match_id' : match_id,
+        'wht_id' : wht_id,
+        'blk_id' : blk_id,
     }
     return render(request, 'chess/match.html', context)
+
+
+def match_making(request, player_id):
+    context = {
+        'player_id' : player_id,
+    }
+    return render(request, 'chess/match_making.html', context)
