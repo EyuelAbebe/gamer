@@ -14,7 +14,8 @@ class Match(models.Model):
     white = models.ForeignKey(User, related_name="White")
     black = models.ForeignKey(User, related_name="Black")
     moves = models.TextField()
-    date_played = models.DateTimeField(auto_now=True)
+    date_played = models.DateTimeField(auto_now=True, blank=True)
+    winner = models.CharField(max_length=10, default='white')
 
 
 class Player(models.Model):
@@ -23,18 +24,21 @@ class Player(models.Model):
     wins = models.PositiveIntegerField(default=0)
     losses = models.PositiveIntegerField(default=0)
     draws = models.PositiveIntegerField(default=0)
-    matches = models.ManyToManyField(Match, related_name="Player")
+    matches = models.ManyToManyField(Match, related_name="Player", blank=True)
     all_opponents_rating = models.PositiveIntegerField(default=0)
     photo = models.ImageField(upload_to=get_file_owner_username,
-                              height_field='height',
-                              width_field='width')
+                              blank=True)
 
     def update_all_opponents_rating(self, other):
         self.all_opponents_rating += other.rating
 
     def calc_rating(self):
-        numerator = (self.opponents_rating + 400 * (self.wins - self.losses))
+        numerator = (self.all_opponents_rating + 400 * (self.wins - self.losses))
         denom = self.wins + self.losses + self.draws
+
+        if denom == 0:
+            return 1200
+
         return numerator // denom
 
     def save(self, *args, **kwargs):
