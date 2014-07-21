@@ -84,3 +84,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_USE_TLS = True
+with open(os.path.join(BASE_DIR, 'access/email.txt')) as f:
+    EMAIL_HOST = f.readline().strip()
+    EMAIL_PORT = f.readline().strip()
+    EMAIL_HOST_USER = f.readline().strip()
+    EMAIL_HOST_PASSWORD = f.readline().strip()
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+ACCOUNT_ACTIVATION_DAYS = 7
