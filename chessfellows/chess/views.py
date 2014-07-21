@@ -27,3 +27,13 @@ def match_making(request, player_id):
         'player_id' : player_id,
     }
     return render(request, 'chess/match_making.html', context)
+
+
+def match_result(request, win_id, lose_id):
+    context = {
+        'winner' : win_id,
+        'loser' : lose_id,
+        'win_value' : 30,
+        'lose_value' : 10,
+    }
+    return render(request, 'chess/match_result.html', context)
