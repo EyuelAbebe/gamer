@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'chessfellows.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', views.base, name='base'),
+    url(r'^player_(?P<player_id>\d+)/$', views.profile, name='profile'),
     url(r'^m_(?P<match_id>\d+)/w_(?P<wht_id>\d+)/b_(?P<blk_id>\d+)/$',
         views.match, name='match'),
 )
