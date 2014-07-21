@@ -1,11 +1,10 @@
-{% extends "base.html" %}
-{% load i18n %}
+{% extends "chess/base.html" %}
 
-{% block content %}
+{% block body %}
 <form method="post" action=".">
   {% csrf_token %}
   {{ form.as_p }}
 
-  <input type="submit" value="{% trans 'Submit' %}" />
+  <input type="submit" value="Submit" />
 </form>
 {% endblock %}
