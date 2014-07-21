@@ -25,8 +25,7 @@ class Player(models.Model):
     draws = models.PositiveIntegerField(default=0)
     matches = models.ManyToManyField(Match, related_name="Player")
     all_opponents_rating = models.PositiveIntegerField(default=0)
-    image_upload_folder = 'photos/'
-    photo = models.ImageField(upload_to=image_upload_folder,
+    photo = models.ImageField(upload_to=get_file_owner_username,
                               height_field='height',
                               width_field='width')
 
@@ -39,7 +38,5 @@ class Player(models.Model):
         return numerator // denom
 
     def save(self, *args, **kwargs):
-        opponent = Match.objects.filter()
-        self.update_all_opponents_rating(opponent)
         self.rating = self.calc_rating()
         super(Player, self).save(*args, **kwargs)
