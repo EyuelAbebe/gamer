@@ -1,8 +1,16 @@
 <!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <script src="{{ STATIC_URL }}js/three/three.min.js"></script>
+    </head>
 
-<p>ChessFellows Main Page</p>
-
-
-
-{% block body %}
-{% endblock %}
+    <body>
+        <p>ChessFellows Main Page</p>
+        <div style="width:500px;height:500px;">
+        <script src="{{ STATIC_URL }}js/sample.js"></script>
+        </div>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>
