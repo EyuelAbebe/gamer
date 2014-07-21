@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'south',
     'chess',
     'rest_framework',
+    'registration'
 )
 
 MIDDLEWARE_CLASSES = (
