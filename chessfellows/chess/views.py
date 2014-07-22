@@ -6,16 +6,24 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 
 
+def base(request):
+    context = {}
+    return render(request, 'chess/base.html', context)
+
+
 def home_page(request):
     return render_to_response('user_profile/home_page.html',
                               context_instance={})
+
 
 def history_page(request):
     return render_to_response('user_profile/history_page.html',
                               context_instance={})
 
+
 def logout_page(request):
     pass
+
 
 def profile_page(request):
     "Returns profile page for a logged in user."
