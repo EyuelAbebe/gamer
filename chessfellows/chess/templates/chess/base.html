@@ -1,5 +1,14 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% load staticfiles %}
+    <title>{% block title %} ChessFellows {% endblock %} </title>
+</head>
 
-<H1>ChessFellows Main Page</H1>
+<body> {% block body %}<H1>ChessFellows Main Page</H1>{% endblock %} </body>
 
-<body>{% block body %}{% endblock%}</body>
+<footer>Play chess.</footer>
+
+</html>
