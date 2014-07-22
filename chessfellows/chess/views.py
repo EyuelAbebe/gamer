@@ -1,12 +1,18 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from chess.models import Player, Match
 from django.contrib.auth.models import User
+
+
+def landing(request):
+    context = {}
+    return render(request, 'chess/landing.html', context)
 
 
 def home_page(request):
     return render_to_response('user_profile/home_page.html',
                               context_instance={})
+
 
 def history_page(request):
     return render_to_response('user_profile/history_page.html',
