@@ -36,6 +36,14 @@ class Piece(object):
         else:
             self.x, self.y = pos
 
+    def move(self, pos, board):
+        if pos in self.possible_moves(board):
+            dx, dy = pos
+            self.x += dx
+            self.y += dy
+            board[_coord_to_algebraic((self.x, self.y))]
+            return board
+
 
 class SimpleUnit(Piece):
     """Returns a SimpleUnit to test position/movement basics."""
