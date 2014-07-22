@@ -63,8 +63,8 @@ class Player(models.Model):
         self.all_opponents_rating += other.rating
 
     def calc_reg_rating(self):
-        numerator = (self.all_opponents_rating + 400 * (self.reg_wins - self.losses))
-        denom = self.wins + self.losses + self.draws
+        numerator = (self.all_opponents_rating + 400 * (self.reg_wins - self.reg_losses))
+        denom = self.reg_wins + self.reg_losses + self.reg_draws
 
         if denom == 0:
             return 1200
