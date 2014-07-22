@@ -17,5 +17,11 @@ def test_coord_to_a1():
     for coord in VALID_COORDS:
         assert engine._coord_to_a1.get(coord, False) is not False
     for coord in INVALID_COORDS:
-        print coord
         assert engine._coord_to_a1.get(coord, False) is False
+
+
+def test_a1_to_coord():
+    for a1 in VALID_A1:
+        assert engine._a1_to_coord.get(a1, False) is not False
+    for a1 in INVALID_A1:
+        assert engine._a1_to_coord.get(a1, False) is False
