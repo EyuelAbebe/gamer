@@ -82,6 +82,11 @@ class Common(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    MEDIA_ROOT = '../chessfellows/uploaded_images'
+    MEDIA_URL = '/media/'
+
     EMAIL_USE_TLS = True
     with open(os.path.join(BASE_DIR, 'access/email.txt')) as f:
         EMAIL_HOST = f.readline().strip()
@@ -95,5 +100,4 @@ class Common(Configuration):
 
 class Dev(Common):
     DEBUG = True
-    TEMPLATE_DEBUG = True
-    STATIC_URL = '/static/'
+    TEMPLATE_DEBUG = DEBUG

@@ -24,6 +24,10 @@ def profile_page(request):
 
     user_ = get_object_or_404(User, pk=request.user.id)
     player = get_object_or_404(Player, user=request.user)
+    player_info = {'age': player.age,
+                   'country': player.country,
+                   'photo': player.photo,
+                   'date' : player.date_joined}
     regular = {'rating': player.reg_rating,
                'wins': player.reg_wins,
                'losses': player.reg_losses,
@@ -42,12 +46,11 @@ def profile_page(request):
               'draws': player.bu_losses,
               'total': player.bu_wins + player.bu_losses + player.bu_draws
     }
-    photo = player.photo
     context = RequestContext(request, {'regular': regular,
                                        'blitz': blitz,
                                        'bullet': bullet,
                                        'user': user_,
-                                       'photo': photo
+                                       'player': player_info
                                        })
     return render_to_response('user_profile/profile.html',
                               context_instance=context)
