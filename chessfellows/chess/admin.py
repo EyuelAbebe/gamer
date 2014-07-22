@@ -17,10 +17,18 @@ class PlayerAdmin(admin.ModelAdmin):
 
     model = Player
     list_display = ('user',
-                    'rating',
-                    'wins',
-                    'losses',
-                    'draws',
+                    'reg_rating',
+                    'reg_wins',
+                    'reg_losses',
+                    'reg_draws',
+                    'bl_rating',
+                    'bl_wins',
+                    'bl_losses',
+                    'bl_draws',
+                    'bu_rating',
+                    'bu_wins',
+                    'bu_losses',
+                    'bu_draws',
                     'photo')
 
     search_fields = ['user']
