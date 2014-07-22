@@ -8,6 +8,8 @@
 
 # Accept algebraic as input; ultimately return algebraic
 # Use coordinates internally
+# Refer to coordinate position as 'coord'
+# Refer to algebraic position as 'a1'
 
 _coord_to_a1 = dict(
     [((x, y), chr(x) + chr(y)) for x in xrange(97, 105) for y in xrange(49, 57)]
@@ -17,7 +19,7 @@ _a1_to_coord = dict(
     )
 
 
-def _is_pos_on_board(coord):
+def _is_coord_on_board(coord):
     u"""Return True if coordinate is on the board."""
     x, y = coord
     if _coord_to_a1.get((x, y), False):
@@ -28,27 +30,25 @@ def _is_pos_on_board(coord):
 
 class Piece(object):
     """Parent class for chess pieces."""
-    def __init__(self, pos):
+    def __init__(self, coord):
         """Instantiate a piece at a coordinate position."""
         super(Piece, self).__init__()
-        if isinstance(pos, str):
-            self.x, self.y = _a1_to_coord[pos]
+        if isinstance(coord, str):
+            self.x, self.y = _a1_to_coord[coord]
         else:
-            self.x, self.y = pos
+            self.x, self.y = coord
 
-    def move(self, pos, board):
-        if pos in self.possible_moves(board):
-            dx, dy = pos
-            self.x += dx
-            self.y += dy
-            board[_coord_to_a1[(self.x, self.y)]]
+    def move(self, coord, board):
+        if coord in self.possible_moves(board):
+            self.x, self.y = coord
+            board[coord] = self
             return board
 
 
 class SimpleUnit(Piece):
     """Returns a SimpleUnit to test position/movement basics."""
-    def __init__(self, pos, color):
-        super(SimpleUnit, self).__init__(pos)
+    def __init__(self, coord, color):
+        super(SimpleUnit, self).__init__(coord)
         self.color = color
         self.moves = [(0, 1)]
 
@@ -56,11 +56,10 @@ class SimpleUnit(Piece):
         valid_moves = []
         for move in self.moves:
             dx, dy = move
-            new_pos = (self.x + dx, self.y + dy)
-            if _is_pos_on_board(new_pos):
-                alg = _coord_to_a1[new_pos]
-                if not board[alg] or (board[alg].color != self.color):
-                    valid_moves.append(new_pos)
+            new_coord = (self.x + dx, self.y + dy)
+            if _is_coord_on_board(new_coord):
+                if not board[new_coord] or (board[new_coord].color != self.color):
+                    valid_moves.append(new_coord)
         return valid_moves
 
     def __repr__(self):
@@ -71,25 +70,31 @@ class SimpleUnit(Piece):
 
 
 def _create_blank_board():
-    board = dict([(_coord_to_a1[(x, y)], None) for x in xrange(97, 105) for y in xrange(49, 57)])
+    board = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
     return board
 
 
 def _add_simple_units(board=_create_blank_board()):
-    black = [_coord_to_a1[(x, y)] for x in xrange(97, 105) for y in xrange(55, 57)]
-    white = [_coord_to_a1[(x, y)] for x in xrange(97, 105) for y in xrange(49, 51)]
+    black = [(x, y) for x in xrange(97, 105) for y in xrange(55, 57)]
+    white = [(x, y) for x in xrange(97, 105) for y in xrange(49, 51)]
     for i in black:
         board[i] = SimpleUnit(i, 'black')
     for i in white:
         board[i] = SimpleUnit(i, 'white')
     return board
 
-start_board = _add_simple_units()
 
-
-def move():
+def move(board, start_a1, end_a1):
     """Return a board with the piece moved.
 
     Accepts algebraic notation.
     """
-    pass
+    start_coord, end_coord = _a1_to_coord[start_a1], _a1_to_coord[end_a1]
+    if not board[start_coord]:
+        raise LookupError("No piece at that location")
+    piece = board[start_coord]
+    return piece.move(end_coord, board)
+
+
+if __name__ == "__main__":
+    start_board = _add_simple_units()
