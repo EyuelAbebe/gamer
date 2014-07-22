@@ -60,3 +60,6 @@ chessfellows/access
 
 
 chessfellows/chess/migrations/
+
+static/admin/
+static/rest_framework/
