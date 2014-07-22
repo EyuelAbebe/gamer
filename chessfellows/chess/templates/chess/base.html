@@ -2,14 +2,23 @@
 <html>
     <head>
         {% load staticfiles %}
-        <script src="{{ STATIC_URL }}js/three/three.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/chessboard/chessboard-0.3.0.css" />
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="{{ STATIC_URL }}js/chessboard/chessboard-0.3.0.js"></script>
+
     </head>
 
     <body>
         <p>ChessFellows Main Page</p>
-        <div style="width:500px;height:500px;">
-        <script src="{{ STATIC_URL }}js/sample.js"></script>
-        </div>
+
+            <div id="board2" style="width: 400px"></div>
+            <input type="button" id="startBtn" value="Start" />
+<input type="button" id="clearBtn" value="Clear" />
+            {% load staticfiles %}
+            <script src="{{ STATIC_URL }}js/match.js"></script>
+
+
+
         {% block body %}
         {% endblock %}
     </body>
