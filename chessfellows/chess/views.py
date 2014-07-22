@@ -1,9 +1,7 @@
-from django.shortcuts import render
 from django.template import RequestContext
-from django.shortcuts import get_list_or_404, render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from chess.models import Player, Match
 from django.contrib.auth.models import User
-from django.contrib.sessions.models import Session
 
 
 def home_page(request):
@@ -14,26 +12,35 @@ def history_page(request):
     return render_to_response('user_profile/history_page.html',
                               context_instance={})
 
-def logout_page(request):
-    pass
 
 def profile_page(request):
-    "Returns profile page for a logged in user."
-    player = get_object_or_404(Player, user=request.user)
-    rating = player.rating
-    wins = player.wins
-    losses = player.losses
-    draws = player.draws
-    games_played = wins + losses + draws
-    photo = player.photo
+    """Returns profile page for a logged in user."""
+
     user_ = get_object_or_404(User, pk=request.user.id)
-    Session['username'] = user_.username
-    context = RequestContext(request, {'player': player,
+    player = get_object_or_404(Player, user=request.user)
+    regular = {'rating': player.reg_rating,
+               'wins': player.reg_wins,
+               'losses': player.reg_losses,
+               'draws': player.reg_draws,
+               'total': player.reg_wins + player.reg_losses + player.reg_draws
+    }
+    blitz = {'rating': player.bl_rating,
+             'wins': player.bl_wins,
+             'losses': player.bl_losses,
+             'draws': player.bl_losses,
+             'total': player.bl_wins + player.bl_losses + player.bl_draws
+    }
+    bullet = {'rating': player.bu_rating,
+              'wins': player.bu_wins,
+              'losses': player.bu_losses,
+              'draws': player.bu_losses,
+              'total': player.bu_wins + player.bu_losses + player.bu_draws
+    }
+    photo = player.photo
+    context = RequestContext(request, {'regular': regular,
+                                       'blitz': blitz,
+                                       'bullet': bullet,
                                        'user': user_,
-                                       'rating': rating,
-                                       'wins': wins,
-                                       'losses': losses,
-                                       'total': games_played,
                                        'photo': photo
                                        })
     return render_to_response('user_profile/profile.html',
