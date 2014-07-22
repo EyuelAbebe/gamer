@@ -1,0 +1,192 @@
+{% extends "user_profile/profile_base.html" %}
+
+{% block profile %}
+   <div class="col-md-10">
+                <div class="panel top">
+                    <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg" alt="...">
+                    <div class="name"><small>{{ user.last_name }}, {{ user.first_name }} </small></div>
+                    <div class="rating"><small>{{ rating }} </small></div>
+                    <a href="#" class="btn btn-xs btn-primary pull-right" style="margin:10px;"><span class="glyphicon glyphicon-picture"></span> Change cover</a>
+                </div>
+
+        <br><br><br>
+
+        <ul class="nav nav-tabs" id="myTab">
+          <li><a href="#personal" data-toggle="tab"><i class="fa fa-file-text-o"></i> Peronal Info</a></li>
+          <li><a href="#stats" data-toggle="tab"><i class="fa fa-bar-chart-o"></i> Statistics</a></li>
+          <li><a href="#progress" data-toggle="tab"><i class="fa fa-signal"></i> Progress</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div class="tab-pane" id="personal">
+
+                <div class="container">
+                  <div class="row">
+                    <div class="col-md-8">
+
+                      <div class="panel panel-default">
+                            <div class="panel-body">
+                                    <div class="row">
+                                      <div class="col-xs-12 col-sm-4 text-center">
+                                                <img src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg" alt="" class="center-block img-circle img-responsive">
+                                                          <h6>Upload a different photo...</h6>
+                                                          <input type="file" class="form-control">
+                                        </div><!--/col-->
+                                        <div class="col-xs-12 col-sm-8" id='personal_info'>
+                                            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+                                            <p><strong>Username: </strong>{{ user.username }}</p>
+                                            <p><strong>Age: </strong> {{ player.age }} </p>
+                                            <p><strong>Country: </strong> {{ player.country }} </p>
+                                            <p><strong>Ratings: </strong>
+                                                <span class="label label-info tags">Regular: {{ regular.rating }}</span>
+                                                <span class="label label-info tags">Blitz: {{ blitz.rating }}</span>
+                                                <span class="label label-info tags">Bullet: {{ bullet.rating }}</span>
+                                            </p>
+                                            <p><strong>Date Joined: </strong>{{ player.date }}</p>
+
+                                            <br><br><br>
+
+                                            <button id ="edit_button"class="btn btn-success btn-large"><i class="icon-white icon-heart"></i> Edit Information </button>
+
+                                        </div><!--/col-->
+
+
+                                        <div class="col-xs-12 col-sm-8" id='edit_personal_info'>
+                                            <h1>Edit Information</h1>
+                                            <hr>
+                                            <div class="row">
+                                              <div class="col-md-9 personal-info">
+                                                <h3>Personal info</h3>
+
+                                                <form class="form-horizontal" role="form">
+                                                  <div class="form-group">
+                                                    <label class="col-lg-3 control-label">First name:</label>
+                                                    <div class="col-lg-8">
+                                                      <input class="form-control" type="text" value="{{ user.first_name }}">
+                                                    </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Last name:</label>
+                                                    <div class="col-lg-8">
+                                                      <input class="form-control" type="text" value="{{ user.last_name }}">
+                                                    </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label class="col-lg-3 control-label">Email:</label>
+                                                    <div class="col-lg-8">
+                                                      <input class="form-control" type="text" value="{{ user.email }}">
+                                                    </div>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label class="col-md-3 control-label">Username:</label>
+                                                    <div class="col-md-8">
+                                                      <input class="form-control" type="text" value="{{ user.username }}">
+                                                    </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label class="col-md-3 control-label">Password:</label>
+                                                    <div class="col-md-8">
+                                                      <input class="form-control" type="password" value="">
+                                                    </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label class="col-md-3 control-label">Confirm password:</label>
+                                                    <div class="col-md-8">
+                                                      <input class="form-control" type="password" value="">
+                                                    </div>
+                                                  </div>
+                                                  <div class="form-group">
+                                                    <label class="col-md-3 control-label"></label>
+                                                    <div class="col-md-8">
+                                                      <input id="save_personal_info" type="submit" class="btn btn-primary" value="Save Changes">
+                                                      <span></span>
+                                                      <input id="personal_info_cancel" type="reset" class="btn btn-default" value="Cancel">
+                                                    </div>
+                                                  </div>
+                                                </form>
+                                              </div>
+                                          </div>
+                                        </div>
+                                        <hr>
+
+
+
+                                    </div><!--/row-->
+                              </div><!--/panel-body-->
+                          </div><!--/panel-->
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="stats">
+              <div class="panel-heading">Statistics</div>
+                  <div class="panel-body">
+                    <p> Shows all  games played; wins, losses and draws along with ratings for each category.</p>
+                  </div>
+
+                  <!-- Table -->
+                  <table class="table table-striped table-bordered table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Current Rating</th>
+                            <th>Total Game Played</th>
+                            <th>Wins</th>
+                            <th>Losses</th>
+                            <th>Draws</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Regular</td>
+                            <td>{{ regular.rating }}</td>
+                            <td>{{ regular.total }}</td>
+                            <td>{{ regular.wins }}</td>
+                            <td>{{ regular.losses }}</td>
+                            <td>{{ regular.draws }}</td>
+                        </tr>
+                        <tr>
+                            <td>Blitz</td>
+                            <td>{{ blitz.rating }}</td>
+                            <td>{{ blitz.total }}</td>
+                            <td>{{ blitz.wins }}</td>
+                            <td>{{ blitz.losses }}</td>
+                            <td>{{ blitz.draws }}</td>
+                        </tr>
+                        <tr>
+                            <td>Bullet</td>
+                            <td>{{ bullet.rating }}</td>
+                            <td>{{ bullet.total }}</td>
+                            <td>{{ bullet.wins }}</td>
+                            <td>{{ bullet.losses }}</td>
+                            <td>{{ bullet.draws }}</td>
+                        </tr>
+                    </tbody>
+                  </table>
+
+              </div>
+
+            <div class="tab-pane" id="progress">
+                    <a type="button" data-toggle="collapse" data-target="#s1">
+                    <div class="btn-toolbar well well-sm" role="toolbar"  style="margin:0px;">
+                      <div class="btn-group"><input type="checkbox"></div>
+                      <div class="btn-group col-md-3">Kumar</div>
+                      <div class="btn-group col-md-8"><b>This is reply from Bootstrap plugin</b> <div class="pull-right"><i class="glyphicon glyphicon-time"></i> 12:30 AM</div> </div>
+                    </div>
+                </a>
+                <div id="s1" class="collapse out well">This is the message body1</div>
+                <br>
+                <button class="btn btn-primary btn-xs"><i class="fa fa-check-square-o"></i> Delete Checked Item's</button>
+              </div>
+
+        </div>
+   </div>
+
+{% endblock %}
+
+
+
+        <!--http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg-->

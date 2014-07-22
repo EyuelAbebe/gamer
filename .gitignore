@@ -52,5 +52,14 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+chessfellows/admin/
+
+
 # Access info
 chessfellows/access
+
+
+chessfellows/chess/migrations/
+
+static/admin/
+static/rest_framework/

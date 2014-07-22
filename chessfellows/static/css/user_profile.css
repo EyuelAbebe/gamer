@@ -1,0 +1,50 @@
+.pic
+{
+     margin-top:50px; 
+     width:120px;
+     margin-left:50px;
+     margin-bottom:-60px;
+}
+
+.top
+{
+    background-image:url("http://i173.photobucket.com/albums/w60/mike365live/chess-wallpaper-3d-04.jpg");
+}
+
+.name
+{
+    position:absolute;
+    padding-left:200px;
+    font-size:30px;
+}
+
+.rating
+{
+    position:absolute;
+    padding-left:250px;
+    font-size:30px;
+    margin-top: 25px;
+}
+
+
+.dropdown
+{
+    position:absolute;
+}
+
+.change
+{
+ position:relative; 
+ bottom:20px;
+ padding:1px;
+ color:white;
+ text-decoration:none;
+}
+
+
+.change:hover
+{
+ text-decoration:none;
+ background-color:black;
+ color:white;
+}
