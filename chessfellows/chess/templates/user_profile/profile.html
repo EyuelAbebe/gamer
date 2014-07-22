@@ -3,7 +3,7 @@
 {% block profile %}
    <div class="col-md-10">
                 <div class="panel">
-                    <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg" alt="...">
+                    <img class="pic img-circle" src="{{ photo.image.url }}" alt="...">
                     <div class="name"><small>{{ user.last_name }}, {{ user.first_name }} </small></div>
                     <a href="#" class="btn btn-xs btn-primary pull-right" style="margin:10px;"><span class="glyphicon glyphicon-picture"></span> Change cover</a>
                 </div>
@@ -11,8 +11,8 @@
         <br><br><br>
 
         <ul class="nav nav-tabs" id="myTab">
-          <li class="active"><a href="#inbox" data-toggle="tab"><i class="fa fa-envelope-o"></i> Inbox</a></li>
-          <li><a href="#sent" data-toggle="tab"><i class="fa fa-reply-all"></i> Sent</a></li>
+          <li class="active"><a href="#inbox" data-toggle="tab"><i class="fa fa-envelope-o"></i> Statistics</a></li>
+          <li><a href="#sent" data-toggle="tab"><i class="fa fa-reply-all"></i> Progress</a></li>
           <li><a href="#assignment" data-toggle="tab"><i class="fa fa-file-text-o"></i> Assignment</a></li>
           <li><a href="#event" data-toggle="tab"><i class="fa fa-clock-o"></i> Event</a></li>
         </ul>
@@ -68,3 +68,7 @@
    </div>
 
 {% endblock %}
+
+
+
+        <!--http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg-->

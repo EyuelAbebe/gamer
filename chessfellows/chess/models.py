@@ -38,6 +38,8 @@ class Player(models.Model):
 
         if denom == 0:
             return 1200
+        if numerator < 0:
+            return 1200
 
         return numerator // denom
 

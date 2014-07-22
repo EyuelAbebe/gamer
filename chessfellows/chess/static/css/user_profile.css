@@ -1,6 +1,6 @@
 .pic
 {
-     margin-top:50px;
+     margin-top:50px; 
      width:120px;
      margin-left:50px;
      margin-bottom:-60px;
@@ -8,7 +8,7 @@
 
 .panel
 {
-    background-image:url("http://autoimagesize.com/wp-content/uploads/2014/01/rainbow-aurora-background-wallpaper-colour-images-rainbow-background.jpg");
+    background-image:url("http://i173.photobucket.com/albums/w60/mike365live/chess-wallpaper-3d-04.jpg");
 }
 
 .name
@@ -25,7 +25,7 @@
 
 .change
 {
- position:relative;
+ position:relative; 
  bottom:20px;
  padding:1px;
  color:white;

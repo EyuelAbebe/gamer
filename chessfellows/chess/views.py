@@ -25,13 +25,15 @@ def profile_page(request):
     losses = player.losses
     draws = player.draws
     games_played = wins + losses + draws
+    photo = player.photo
     user_ = get_object_or_404(User, pk=request.user.id)
     context = RequestContext(request, {'player': player,
                                        'user': user_,
                                        'rating': rating,
                                        'wins': wins,
                                        'losses': losses,
-                                       'total': games_played
+                                       'total': games_played,
+                                       'photo': photo
                                        })
     return render_to_response('user_profile/profile.html',
                               context_instance=context)
