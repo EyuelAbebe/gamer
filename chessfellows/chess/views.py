@@ -4,9 +4,9 @@ from chess.models import Player, Match
 from django.contrib.auth.models import User
 
 
-def base(request):
+def landing(request):
     context = {}
-    return render(request, 'chess/base.html', context)
+    return render(request, 'chess/landing.html', context)
 
 
 def home_page(request):
