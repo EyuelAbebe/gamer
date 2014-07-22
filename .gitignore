@@ -57,3 +57,6 @@ chessfellows/admin/
 
 # Access info
 chessfellows/access
+
+
+chessfellows/chess/migrations/

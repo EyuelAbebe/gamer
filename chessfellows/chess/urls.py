@@ -5,9 +5,10 @@ from chess import views
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^home', views.home_page, name='home'),
-    url(r'^history$', views.history_page, name='history'),
-    url(r'^profile$', views.profile_page, name='profile'),
+    url(r'^accounts/home/', views.home_page, name='home'),
+    url(r'^accounts/history/$', views.history_page, name='history'),
+    url(r'^accounts/profile/$', views.profile_page, name='profile'),
+
 )
 
 

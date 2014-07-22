@@ -3,7 +3,7 @@ from django.template import RequestContext
 from django.shortcuts import get_list_or_404, render_to_response, get_object_or_404
 from chess.models import Player, Match
 from django.contrib.auth.models import User
-
+from django.contrib.sessions.models import Session
 
 
 def home_page(request):
@@ -27,6 +27,7 @@ def profile_page(request):
     games_played = wins + losses + draws
     photo = player.photo
     user_ = get_object_or_404(User, pk=request.user.id)
+    Session['username'] = user_.username
     context = RequestContext(request, {'player': player,
                                        'user': user_,
                                        'rating': rating,
