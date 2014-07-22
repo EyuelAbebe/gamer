@@ -2,7 +2,8 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 
-game_type_choices =((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
+game_type_choices = ((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
+
 
 def get_file_owner_username(instance, filename):
     parts = [instance.user.username]
@@ -25,15 +26,27 @@ class Match(models.Model):
 
 class Player(models.Model):
     user = models.OneToOneField(User)
-    reg_rating = models.DecimalField(default=1200.00, max_digits=6, decimal_places=2)
+    reg_rating = models.DecimalField(
+        default=1200.00,
+        max_digits=6,
+        decimal_places=2
+        )
     reg_wins = models.PositiveIntegerField(default=0)
     reg_losses = models.PositiveIntegerField(default=0)
     reg_draws = models.PositiveIntegerField(default=0)
-    bl_rating = models.DecimalField(default=1200.00, max_digits=6, decimal_places=2)
+    bl_rating = models.DecimalField(
+        default=1200.00,
+        max_digits=6,
+        decimal_places=2
+        )
     bl_wins = models.PositiveIntegerField(default=0)
     bl_losses = models.PositiveIntegerField(default=0)
     bl_draws = models.PositiveIntegerField(default=0)
-    bu_rating = models.DecimalField(default=1200.00, max_digits=6, decimal_places=2)
+    bu_rating = models.DecimalField(
+        default=1200.00,
+        max_digits=6,
+        decimal_places=2
+        )
     bu_wins = models.PositiveIntegerField(default=0)
     bu_losses = models.PositiveIntegerField(default=0)
     bu_draws = models.PositiveIntegerField(default=0)
@@ -50,7 +63,7 @@ class Player(models.Model):
         self.all_opponents_rating += other.rating
 
     def calc_reg_rating(self):
-        numerator = (self.all_opponents_rating + 400 * (self.wins - self.losses))
+        numerator = (self.all_opponents_rating + 400 * (self.reg_wins - self.losses))
         denom = self.wins + self.losses + self.draws
 
         if denom == 0:
