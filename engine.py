@@ -24,3 +24,14 @@ def _is_pos_on_board(coord):
         return True
     else:
         return False
+
+
+class Piece(object):
+    """Parent class for chess pieces."""
+    def __init__(self, pos):
+        """Instantiate a piece at a coordinate position."""
+        super(Piece, self).__init__()
+        if isinstance(pos, str):
+            self.x, self.y = _algebraic_to_coord(pos)
+        else:
+            self.x, self.y = pos
