@@ -131,3 +131,10 @@ def test_SimpleUnit_moving_into_enemy():
     new_board = p.move(VALID_COORDS[1], board)
     assert new_board[VALID_COORDS[0]] is None
     assert new_board[VALID_COORDS[1]] is p
+
+
+def test_instantiate_Match():
+    u"""Assert an instance of Match has the expected attributes."""
+    m = engine.Match()
+    assert isinstance(m, engine.Match)
+    assert m.board == dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
