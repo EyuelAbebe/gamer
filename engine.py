@@ -76,9 +76,9 @@ class Pawn(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -1
+            return "-1"
         else:
-            return 1
+            return "1"
 
 
 class Knight(SimpleUnit):
@@ -88,9 +88,9 @@ class Knight(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -2
+            return "-2"
         else:
-            return 2
+            return "2"
 
 
 class Bishop(SimpleUnit):
@@ -100,9 +100,9 @@ class Bishop(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -3
+            return "-3"
         else:
-            return 3
+            return "3"
 
 
 class Rook(SimpleUnit):
@@ -112,9 +112,9 @@ class Rook(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -4
+            return "-4"
         else:
-            return 4
+            return "4"
 
 
 class Queen(SimpleUnit):
@@ -124,9 +124,9 @@ class Queen(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -5
+            return "-5"
         else:
-            return 5
+            return "5"
 
 
 class King(SimpleUnit):
@@ -136,9 +136,9 @@ class King(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return -6
+            return "-6"
         else:
-            return 6
+            return "6"
 
 
 class Match(object):
@@ -169,6 +169,16 @@ class Match(object):
         for i in white:
             self.board[i] = SimpleUnit(i, 'white')
 
+    def _add_starting_units(self):
+        black_units = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+        white_units = black_units[::-1]
+        for i, unit in enumerate(black_units):
+            self.board[(97 + i, 56)] = unit((97 + i, 56), 'black')
+            self.board[(97 + i, 55)] = Pawn((97 + i, 55), 'black')
+        for i, unit in enumerate(white_units):
+            self.board[(97 + i, 49)] = unit((97 + i, 49), 'white')
+            self.board[(97 + i, 50)] = Pawn((97 + i, 50), 'white')
+
 if __name__ == "__main__":
     m = Match()
-    m._add_simple_units()
+    m._add_starting_units()
