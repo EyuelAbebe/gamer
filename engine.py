@@ -64,9 +64,9 @@ class SimpleUnit(Piece):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Sb'
+            return 'Sb:({},{})'.format(self.x, self.y)
         else:
-            return 'Sw'
+            return 'Sw:({},{})'.format(self.x, self.y)
 
 
 class Match(object):
