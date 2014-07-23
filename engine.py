@@ -259,6 +259,14 @@ class Match(object):
     def view(self):
         print "\n".join(self._view(self._make_square()))
 
+    def _match_won(self, color):
+        u"""Return True if match has been won."""
+        if color == "white":
+            color = "black"
+        else:
+            color = "white"
+        return self._checkmate(color)
+
 
     def _move_from(self, color):
         prompt = u"{}'s turn to move:\nFrom: ".format(color.title())
@@ -286,6 +294,37 @@ class Match(object):
             prompt = "\n".join(prompt)
             end_coord = _a1_to_coord[raw_input(prompt)]
         return end_coord
+
+    def _in_check(self, color):
+        # Locate the king of the given color
+        moves = set()
+        for piece in self.pieces:
+            if piece is not None:
+                if piece.color != color:
+                    for move in piece.possible_moves(self.board):
+                        moves.add(move)
+                if isinstance(piece, King) and (piece.color == color):
+                    king_coord = (piece.x, piece.y)
+        # If king's position is in the list of possible moves -> return True
+        if king_coord in moves:
+            return True
+        else:
+            return False
+
+    def _checkmate(self, color):
+        king = self._find_king(color)
+        if self._in_check(color) and king.possible_moves == []:
+            return True
+        else:
+            return False
+
+    def _find_king(self, color):
+        for piece in self.pieces:
+            if piece is not None:
+                if isinstance(piece, King) and (piece.color == color):
+                    king = piece
+                    break
+        return king
 
 
 if __name__ == "__main__":
