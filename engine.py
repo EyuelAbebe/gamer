@@ -108,6 +108,10 @@ class Knight(SimpleUnit):
             self.viz = -2
         else:
             self.viz = 2
+        self.moves = [
+            (2, 1), (2, -1), (-2, 1), (-2, -1),
+            (1, 2), (1, -2), (-1, 2), (-1, -2)
+        ]
 
     def __repr__(self):
         if self.color == 'black':
