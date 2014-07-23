@@ -1,6 +1,8 @@
 import os
 from django.db import models
 from django.contrib.auth.models import User
+from chessfellows import settings
+import datetime
 
 game_type_choices = ((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
 
@@ -26,6 +28,9 @@ class Match(models.Model):
 
 class Player(models.Model):
     user = models.OneToOneField(User)
+    age = models.PositiveIntegerField(max_length=4, default=0)
+    country = models.CharField(max_length=10, default='USA')
+    date_joined = models.DateTimeField(auto_now=True, blank=True, default=datetime.date.today)
     reg_rating = models.DecimalField(
         default=1200.00,
         max_digits=6,
@@ -53,7 +58,6 @@ class Player(models.Model):
     matches = models.ManyToManyField(Match, related_name="Player", blank=True)
     all_opponents_rating = models.PositiveIntegerField(default=0)
     photo = models.ImageField(upload_to=get_file_owner_username,
-                              default='http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/photo.jpg',
                               blank=True)
 
     def __unicode__(self):
