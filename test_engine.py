@@ -92,8 +92,8 @@ def test_SimpleUnit_possible_moves_into_enemy():
     assert p.possible_moves(board) == [(p.x, p.y + 1)]
 
 
-def test_assert_SimpleUnit_moves_into_empty_space():
-    u"""Assert moving a SimpleUnit into empty space returns a board with unit moved."""
+def test_assert_SimpleUnit_moving_into_empty_space():
+    u"""Assert moving into empty space returns a board with unit moved."""
     p = engine.SimpleUnit(VALID_COORDS[0], 'white')
     board = EMPTY_BOARD.copy()
     new_board = p.move(VALID_COORDS[1], board)
@@ -101,8 +101,8 @@ def test_assert_SimpleUnit_moves_into_empty_space():
     assert new_board[VALID_COORDS[1]] is p
 
 
-def test_SimpleUnit_moves_into_ally():
-    u"""Assert moves into allied units do not return a board."""
+def test_SimpleUnit_moving_into_ally():
+    u"""Assert moving into allied units do not return a board."""
     p = engine.SimpleUnit(VALID_COORDS[0], 'white')
     q = engine.SimpleUnit(VALID_COORDS[1], 'white')
     board = EMPTY_BOARD.copy()
@@ -112,10 +112,22 @@ def test_SimpleUnit_moves_into_ally():
     assert new_board is None
 
 
-def test_SimpleUnit_moves_off_board():
-    u"""Assert moves off the board do not return a board."""
+def test_SimpleUnit_moving_off_board():
+    u"""Assert moving off the board do not return a board."""
     p = engine.SimpleUnit(VALID_COORDS[-1], 'white')
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
     new_board = p.move((105, 56), board)
     assert new_board is None
+
+
+def test_SimpleUnit_moving_into_enemy():
+    u"""Assert moving into an enemy unit returns a board with unit moved."""
+    p = engine.SimpleUnit(VALID_COORDS[0], 'white')
+    q = engine.SimpleUnit(VALID_COORDS[1], 'black')
+    board = EMPTY_BOARD.copy()
+    board[(p.x, p.y)] = p
+    board[(q.x, q.y)] = q
+    new_board = p.move(VALID_COORDS[1], board)
+    assert new_board[VALID_COORDS[0]] is None
+    assert new_board[VALID_COORDS[1]] is p
