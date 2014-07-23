@@ -40,8 +40,8 @@ class Piece(object):
 
     def move(self, coord, board):
         if coord in self.possible_moves(board):
+            board[coord], board[(self.x, self.y)] = self, None
             self.x, self.y = coord
-            board[coord] = self
             return board
 
 
@@ -69,32 +69,34 @@ class SimpleUnit(Piece):
             return 'Sw'
 
 
-def _create_blank_board():
-    board = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
-    return board
+class Match(object):
+    def __init__(self):
+        super(Match, self).__init__()
+        self.board = self._create_blank_board()
 
+    def move(self, start_a1, end_a1):
+        """Return a board with the piece moved.
 
-def _add_simple_units(board=_create_blank_board()):
-    black = [(x, y) for x in xrange(97, 105) for y in xrange(55, 57)]
-    white = [(x, y) for x in xrange(97, 105) for y in xrange(49, 51)]
-    for i in black:
-        board[i] = SimpleUnit(i, 'black')
-    for i in white:
-        board[i] = SimpleUnit(i, 'white')
-    return board
+        Accepts algebraic notation.
+        """
+        start_coord, end_coord = _a1_to_coord[start_a1], _a1_to_coord[end_a1]
+        if not self.board[start_coord]:
+            raise LookupError("No piece at that location")
+        piece = self.board[start_coord]
+        self.board = piece.move(end_coord, self.board)
 
+    def _create_blank_board(self):
+        board = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
+        return board
 
-def move(board, start_a1, end_a1):
-    """Return a board with the piece moved.
-
-    Accepts algebraic notation.
-    """
-    start_coord, end_coord = _a1_to_coord[start_a1], _a1_to_coord[end_a1]
-    if not board[start_coord]:
-        raise LookupError("No piece at that location")
-    piece = board[start_coord]
-    return piece.move(end_coord, board)
-
+    def _add_simple_units(self):
+        black = [(x, y) for x in xrange(97, 105) for y in xrange(55, 57)]
+        white = [(x, y) for x in xrange(97, 105) for y in xrange(49, 51)]
+        for i in black:
+            self.board[i] = SimpleUnit(i, 'black')
+        for i in white:
+            self.board[i] = SimpleUnit(i, 'white')
 
 if __name__ == "__main__":
-    start_board = _add_simple_units()
+    m = Match()
+    m._add_simple_units()
