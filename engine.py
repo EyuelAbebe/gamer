@@ -95,9 +95,9 @@ class Pawn(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Pb:({},{})'.format(self.x, self.y)
+            return 'p'
         else:
-            return 'Pw:({},{})'.format(self.x, self.y)
+            return 'P'
 
 
 class Knight(SimpleUnit):
@@ -115,9 +115,9 @@ class Knight(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Kb:({},{})'.format(self.x, self.y)
+            return 'n'
         else:
-            return 'Kw:({},{})'.format(self.x, self.y)
+            return 'N'
 
 
 class Bishop(SimpleUnit):
@@ -131,9 +131,9 @@ class Bishop(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Bb:({},{})'.format(self.x, self.y)
+            return 'b'
         else:
-            return 'Bw:({},{})'.format(self.x, self.y)
+            return 'B'
 
 
 class Rook(SimpleUnit):
@@ -147,9 +147,9 @@ class Rook(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Rb:({},{})'.format(self.x, self.y)
+            return 'r'
         else:
-            return 'Rw:({},{})'.format(self.x, self.y)
+            return 'R'
 
 
 class Queen(SimpleUnit):
@@ -163,9 +163,9 @@ class Queen(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Qb:({},{})'.format(self.x, self.y)
+            return 'q'
         else:
-            return 'Qw:({},{})'.format(self.x, self.y)
+            return 'Q'
 
 
 class King(SimpleUnit):
@@ -179,9 +179,9 @@ class King(SimpleUnit):
 
     def __repr__(self):
         if self.color == 'black':
-            return 'Kb:({},{})'.format(self.x, self.y)
+            return 'k'
         else:
-            return 'Kw:({},{})'.format(self.x, self.y)
+            return 'K'
 
 
 class Match(object):
@@ -349,9 +349,44 @@ class Match(object):
                     break
         return king
 
+    def _board_to_str(self):
+        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
+        square = []
+        for i, pos in enumerate(positions):
+            if (i != 0) and (i % 8 == 0):
+                square.append("/")
+            if self.board[pos]:
+                square.append(str(self.board[pos]))
+            else:
+                square.append('1')
+        return "".join(square)
+
+    def _str_to_board(self, str_):
+        units = {
+            'r': Rook,
+            'n': Knight,
+            'b': Bishop,
+            'q': Queen,
+            'k': King,
+            'p': Pawn,
+            '1': None
+        }
+        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
+        board = {}
+        str_ = str_.replace("/", "")
+        for i, pos in enumerate(positions):
+            unit = units[str_[i].lower()]
+            if unit is not None:
+                if str_[i].isupper():
+                    color = 'white'
+                else:
+                    color = 'black'
+                board[pos] = units[str_[i].lower()](pos, color)
+            else:
+                board[pos] = None
+        return board
+
 
 if __name__ == "__main__":
     m = Match()
     m._add_starting_units()
-    m.view()
-    m.play_in_terminal()
