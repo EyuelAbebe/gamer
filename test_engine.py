@@ -11,6 +11,7 @@ INVALID_COORDS = [
     ]
 VALID_A1 = [chr(x) + chr(y) for x in xrange(97, 105) for y in xrange(49, 57)]
 INVALID_A1 = ['a0', 'a9', 'h0', 'h9', 'z1', 'z8']
+EMPTY_BOARD = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
 
 
 def test_coord_to_a1():
@@ -53,3 +54,11 @@ def test_instantiate_SimpleUnit():
             assert isinstance(p, engine.SimpleUnit)
             assert p.x, p.y == coord
             assert p.color == color
+
+
+def test_SimpleUnit_possible_moves_empty_space():
+    u"""Assert only valid moves are returned."""
+    p = engine.SimpleUnit(VALID_COORDS[0], 'white')
+    board = EMPTY_BOARD.copy()
+    board[(p.x, p.y)] = p
+    assert p.possible_moves(board) == [(p.x, p.y + 1)]
