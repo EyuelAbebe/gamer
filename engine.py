@@ -69,13 +69,85 @@ class SimpleUnit(Piece):
             return 'Sw:({},{})'.format(self.x, self.y)
 
 
+class Pawn(SimpleUnit):
+    """docstring for Pawn"""
+    def __init__(self, coord, color):
+        super(Pawn, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -1
+        else:
+            return 1
+
+
+class Knight(SimpleUnit):
+    """docstring for Knight"""
+    def __init__(self, coord, color):
+        super(Knight, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -2
+        else:
+            return 2
+
+
+class Bishop(SimpleUnit):
+    """docstring for Bishop"""
+    def __init__(self, coord, color):
+        super(Bishop, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -3
+        else:
+            return 3
+
+
+class Rook(SimpleUnit):
+    """docstring for Rook"""
+    def __init__(self, coord, color):
+        super(Rook, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -4
+        else:
+            return 4
+
+
+class Queen(SimpleUnit):
+    """docstring for Queen"""
+    def __init__(self, coord, color):
+        super(Queen, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -5
+        else:
+            return 5
+
+
+class King(SimpleUnit):
+    """docstring for King"""
+    def __init__(self, coord, color):
+        super(King, self).__init__(coord, color)
+
+    def __repr__(self):
+        if self.color == 'black':
+            return -6
+        else:
+            return 6
+
+
 class Match(object):
     def __init__(self):
         super(Match, self).__init__()
         self.board = self._create_blank_board()
 
     def move(self, start_a1, end_a1):
-        """Return a board with the piece moved.
+        """Update board with the moved piece if move is valid.
 
         Accepts algebraic notation.
         """
