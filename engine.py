@@ -62,7 +62,10 @@ class SimpleUnit(Piece):
     def __init__(self, coord, color):
         super(SimpleUnit, self).__init__(coord)
         self.color = color
-        self.moves = [(0, 1)]
+        if color == 'white':
+            self.moves = [(0, 1)]
+        else:
+            self.moves = [(0, -1)]
 
     def possible_moves(self, board):
         valid_moves = []
