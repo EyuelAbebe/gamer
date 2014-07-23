@@ -18,6 +18,18 @@ _a1_to_coord = dict(
     [(chr(x) + chr(y), (x, y)) for x in xrange(97, 105) for y in xrange(49, 57)]
     )
 
+# Elements of visualization
+pieces = u''.join(unichr(9812 + x) for x in range(12))
+pieces = u' ' + pieces[:6][::-1] + pieces[6:]
+allbox = u''.join(unichr(9472 + x) for x in range(200))
+box = [allbox[i] for i in (2, 0, 12, 16, 20, 24, 44, 52, 28, 36, 60)]
+(vbar, hbar, ul, ur, ll, lr, nt, st, wt, et, plus) = box
+h3 = hbar * 3
+topline = ul + (h3 + nt) * 7 + h3 + ur
+midline = wt + (h3 + plus) * 7 + h3 + et
+botline = ll + (h3 + st) * 7 + h3 + lr
+tpl = u' {0} ' + vbar
+
 
 def _is_coord_on_board(coord):
     u"""Return True if coordinate is on the board."""
@@ -73,75 +85,100 @@ class Pawn(SimpleUnit):
     """docstring for Pawn"""
     def __init__(self, coord, color):
         super(Pawn, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -1
+        else:
+            self.viz = 1
 
     def __repr__(self):
         if self.color == 'black':
-            return "-1"
+            return 'Pb:({},{})'.format(self.x, self.y)
         else:
-            return "1"
+            return 'Pw:({},{})'.format(self.x, self.y)
 
 
 class Knight(SimpleUnit):
     """docstring for Knight"""
     def __init__(self, coord, color):
         super(Knight, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -2
+        else:
+            self.viz = 2
 
     def __repr__(self):
         if self.color == 'black':
-            return "-2"
+            return 'Kb:({},{})'.format(self.x, self.y)
         else:
-            return "2"
+            return 'Kw:({},{})'.format(self.x, self.y)
 
 
 class Bishop(SimpleUnit):
     """docstring for Bishop"""
     def __init__(self, coord, color):
         super(Bishop, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -3
+        else:
+            self.viz = 3
 
     def __repr__(self):
         if self.color == 'black':
-            return "-3"
+            return 'Bb:({},{})'.format(self.x, self.y)
         else:
-            return "3"
+            return 'Bw:({},{})'.format(self.x, self.y)
 
 
 class Rook(SimpleUnit):
     """docstring for Rook"""
     def __init__(self, coord, color):
         super(Rook, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -4
+        else:
+            self.viz = 4
 
     def __repr__(self):
         if self.color == 'black':
-            return "-4"
+            return 'Rb:({},{})'.format(self.x, self.y)
         else:
-            return "4"
+            return 'Rw:({},{})'.format(self.x, self.y)
 
 
 class Queen(SimpleUnit):
     """docstring for Queen"""
     def __init__(self, coord, color):
         super(Queen, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -5
+        else:
+            self.viz = 5
 
     def __repr__(self):
         if self.color == 'black':
-            return "-5"
+            return 'Qb:({},{})'.format(self.x, self.y)
         else:
-            return "5"
+            return 'Qw:({},{})'.format(self.x, self.y)
 
 
 class King(SimpleUnit):
     """docstring for King"""
     def __init__(self, coord, color):
         super(King, self).__init__(coord, color)
+        if color == 'black':
+            self.viz = -6
+        else:
+            self.viz = 6
 
     def __repr__(self):
         if self.color == 'black':
-            return "-6"
+            return 'Kb:({},{})'.format(self.x, self.y)
         else:
-            return "6"
+            return 'Kw:({},{})'.format(self.x, self.y)
 
 
 class Match(object):
+
     def __init__(self):
         super(Match, self).__init__()
         self.board = self._create_blank_board()
@@ -156,6 +193,7 @@ class Match(object):
             raise LookupError("No piece at that location")
         piece = self.board[start_coord]
         self.board = piece.move(end_coord, self.board)
+        self.view()
 
     def _create_blank_board(self):
         board = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
@@ -178,6 +216,50 @@ class Match(object):
         for i, unit in enumerate(white_units):
             self.board[(97 + i, 49)] = unit((97 + i, 49), 'white')
             self.board[(97 + i, 50)] = Pawn((97 + i, 50), 'white')
+
+    def _make_square(self):
+        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
+        square = [[] for i in xrange(8)]
+        current_line = 0
+        line_count = 0
+        for pos in positions:
+            if line_count == 8:
+                current_line += 1
+                line_count = 0
+            if self.board[pos]:
+                square[current_line].append(self.board[pos].viz)
+            else:
+                square[current_line].append(0)
+            line_count += 1
+        return square
+
+    def _inter(self, *args):
+        """Return a unicode string with a line of the chessboard.
+
+        args are 8 integers with the values
+            0 : empty square
+            1, 2, 3, 4, 5, 6: white pawn, knight, bishop, rook, queen, king
+            -1, -2, -3, -4, -5, -6: same black pieces
+        """
+        assert len(args) == 8
+        return vbar + u''.join((tpl.format(pieces[a]) for a in args))
+
+    def _game(self, position):
+        yield topline
+        yield self._inter(*position[0])
+        for row in position[1:]:
+            yield midline
+            yield self._inter(*row)
+        yield botline
+
+    def view(self):
+        print "\n".join(self._game(self._make_square()))
+
+
+# game.__doc__ = """Return the chessboard as a string for a given position.
+
+#     position is a list of 8 lists or tuples of length 8 containing integers
+# """
 
 if __name__ == "__main__":
     m = Match()
