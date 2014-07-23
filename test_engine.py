@@ -14,6 +14,7 @@ INVALID_A1 = ['a0', 'a9', 'h0', 'h9', 'z1', 'z8']
 
 
 def test_coord_to_a1():
+    u"""Assert the coord-to-a1 dictionary has only the desired keypairs."""
     for coord in VALID_COORDS:
         assert engine._coord_to_a1.get(coord, False) is not False
     for coord in INVALID_COORDS:
@@ -21,6 +22,7 @@ def test_coord_to_a1():
 
 
 def test_a1_to_coord():
+    u"""Assert the a1-to-coord dictionary has only the desired keypairs."""
     for a1 in VALID_A1:
         assert engine._a1_to_coord.get(a1, False) is not False
     for a1 in INVALID_A1:
@@ -28,6 +30,7 @@ def test_a1_to_coord():
 
 
 def test_is_coord_on_board():
+    u"""Assert that only valid coords are considered in the board."""
     for coord in VALID_COORDS:
         assert engine._is_coord_on_board(coord) is True
     for coord in INVALID_COORDS:
@@ -35,6 +38,7 @@ def test_is_coord_on_board():
 
 
 def test_instantiate_Piece():
+    u"""Assert an instance of Piece has the expected attributes."""
     for coord in VALID_COORDS:
         p = engine.Piece(coord)
         assert isinstance(p, engine.Piece)
@@ -42,6 +46,7 @@ def test_instantiate_Piece():
 
 
 def test_instantiate_SimpleUnit():
+    u"""Assert an instance of SimpleUnit has the expected attributes."""
     for color in ['white', 'black']:
         for coord in VALID_COORDS:
             p = engine.SimpleUnit(coord, color)
