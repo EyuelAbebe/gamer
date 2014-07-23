@@ -152,3 +152,13 @@ def test_add_simple_units_to_Match():
         assert m.board[coord].color == 'white'
     for coord in [(x, y) for x in xrange(97, 105) for y in xrange(51, 55)]:
         assert m.board[coord] is None
+
+
+def test_move_unit_in_Match_to_valid_a1():
+    u"""Assert moving via Match maintains proper board state."""
+    m = engine.Match()
+    m._add_simple_units()
+    p = m.board[VALID_COORDS[1]]
+    m.move('a2', 'a3')
+    assert m.board[VALID_COORDS[1]] is None
+    assert m.board[VALID_COORDS[2]] is p
