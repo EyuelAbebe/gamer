@@ -386,7 +386,48 @@ class Match(object):
                 board[pos] = None
         return board
 
+    def _play_web(self, board, move, white_move):
+        u"""Return a valid board state in string form.
+
+        Inputs
+        board: A 71 character string representing a board state.
+        move: A 5 character string representing a from and to position.
+        white_move: A boolean indicating if it's the white player's move.
+
+        Return a 71 character string representing a board state. The initial
+        board state will be returned if the move was invalid.
+        """
+        if white_move:
+            color = "white"
+        else:
+            color = "black"
+        self.board = self._str_to_board(board)
+        move_from, move_to = _a1_to_coord[move[0:2]], _a1_to_coord[move[3:]]
+        if self._validate_move_from(move_from, color):
+            piece = board[move_from]
+            if self._vaidate_move_to(piece, move_to):
+                self.board = piece.move(move_to, self.board)
+        return self._board_to_str(), self._match_won(color)
+
+    def _validate_move_from(self, move_from, color):
+        u"""Return True if a piece of the player's color is at move_from."""
+        piece = self.board[move_from]
+        if piece:
+            if piece.color == color and piece.possible_moves(self.board):
+                return True
+        return False
+
+    def _validate_move_to(self, piece, move_to):
+        u"""Return True if the pice can move to the move_to position."""
+        moves = piece.possible_moves(self.board)
+        if move_to in moves:
+            return True
+        return False
 
 if __name__ == "__main__":
     m = Match()
     m._add_starting_units()
+    # m.view()
+    # m.play_in_terminal()
+    str_ = m._board_to_str()
+    new_board = m._str_to_board(str_)
