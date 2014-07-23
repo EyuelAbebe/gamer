@@ -258,12 +258,6 @@ class Match(object):
     def view(self):
         print "\n".join(self._game(self._make_square()))
 
-
-# game.__doc__ = """Return the chessboard as a string for a given position.
-
-#     position is a list of 8 lists or tuples of length 8 containing integers
-# """
-
 if __name__ == "__main__":
     m = Match()
     m._add_starting_units()
