@@ -138,3 +138,17 @@ def test_instantiate_Match():
     m = engine.Match()
     assert isinstance(m, engine.Match)
     assert m.board == dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
+
+
+def test_add_simple_units_to_Match():
+    u"""Assert simple units are added to only the top and bottom two rows."""
+    m = engine.Match()
+    m._add_simple_units()
+    for coord in [(x, y) for x in xrange(97, 105) for y in xrange(55, 57)]:
+        assert isinstance(m.board[coord], engine.SimpleUnit)
+        assert m.board[coord].color == 'black'
+    for coord in [(x, y) for x in xrange(97, 105) for y in xrange(49, 51)]:
+        assert isinstance(m.board[coord], engine.SimpleUnit)
+        assert m.board[coord].color == 'white'
+    for coord in [(x, y) for x in xrange(97, 105) for y in xrange(51, 55)]:
+        assert m.board[coord] is None
