@@ -1,4 +1,5 @@
 import engine
+import pytest
 
 
 VALID_COORDS = [(x, y) for x in xrange(97, 105) for y in xrange(49, 57)]
@@ -155,10 +156,18 @@ def test_add_simple_units_to_Match():
 
 
 def test_move_unit_in_Match_to_valid_a1():
-    u"""Assert moving via Match maintains proper board state."""
+    u"""Assert moving via Match to a valid pos maintains proper board state."""
     m = engine.Match()
     m._add_simple_units()
     p = m.board[VALID_COORDS[1]]
     m.move('a2', 'a3')
     assert m.board[VALID_COORDS[1]] is None
     assert m.board[VALID_COORDS[2]] is p
+
+
+def test_move_unit_in_Match_no_unit_at_start_a1():
+    u"""Assert moving a unit from an empty location raises LookupError."""
+    m = engine.Match()
+    m._add_simple_units()
+    with pytest.raises(LookupError):
+        m.move('a4', 'a5')
