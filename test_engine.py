@@ -171,3 +171,16 @@ def test_move_unit_in_Match_no_unit_at_start_a1():
     m._add_simple_units()
     with pytest.raises(LookupError):
         m.move('a4', 'a5')
+
+
+def test_move_unit_in_Match_to_enemy_a1():
+    u"""Assert moving to an enemy unit maintains proper board state."""
+    m = engine.Match()
+    m._add_simple_units()
+    q = engine.SimpleUnit((97, 51), 'black')
+    m.board[(97, 51)] = q
+    p = m.board[VALID_COORDS[1]]
+    m.move('a2', 'a3')
+    assert m.board[VALID_COORDS[1]] is None
+    assert m.board[VALID_COORDS[2]] is p
+    assert q not in m.board.values()
