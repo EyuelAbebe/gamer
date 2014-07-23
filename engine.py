@@ -257,7 +257,36 @@ class Match(object):
         yield botline
 
     def view(self):
-        print "\n".join(self._game(self._make_square()))
+        print "\n".join(self._view(self._make_square()))
+
+
+    def _move_from(self, color):
+        prompt = u"{}'s turn to move:\nFrom: ".format(color.title())
+        start_coord = _a1_to_coord[raw_input(prompt)]
+        while not self.board[start_coord]:
+            prompt = u"No unit at that location. Pick again.\nFrom: "
+            start_coord = _a1_to_coord[raw_input(prompt)]
+        while self.board[start_coord].color != color:
+            prompt = u"That's not your unit. Pick again. "
+            start_coord = _a1_to_coord[raw_input(prompt)]
+        piece = self.board[start_coord]
+        possible_moves = piece.possible_moves(self.board)
+        if possible_moves == []:
+            print u"That peice does not have valid moves. Pick again. "
+            return self._move_from(color)
+        return piece, possible_moves
+
+    def _move_to(self, piece, possible_moves, color):
+        a1_moves = " ".join([_coord_to_a1[x] for x in possible_moves])
+        prompt = u"Move {} to {}: ".format(piece, a1_moves)
+        end_coord = _a1_to_coord[raw_input(prompt)]
+        while end_coord not in possible_moves:
+            prompt = [u"That's not a valid move for this unit."]
+            prompt.append([u"Move {} to {}: ".format(piece, a1_moves)])
+            prompt = "\n".join(prompt)
+            end_coord = _a1_to_coord[raw_input(prompt)]
+        return end_coord
+
 
 if __name__ == "__main__":
     m = Match()
