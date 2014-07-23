@@ -65,10 +65,18 @@ def test_SimpleUnit_possible_moves_empty_space():
 
 
 def test_SimpleUnit_possible_moves_into_ally_space():
-    u"""Assert moves into allied units are not considered valid."""
+    u"""Assert moves into allied units are not in returned move list."""
     p = engine.SimpleUnit(VALID_COORDS[0], 'white')
     q = engine.SimpleUnit(VALID_COORDS[1], 'white')
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
     board[(q.x, q.y)] = q
+    assert p.possible_moves(board) == []
+
+
+def test_SimpleUnit_possible_moves_off_board():
+    u"""Assert that moves off the board are not in returned move list."""
+    p = engine.SimpleUnit(VALID_COORDS[-1], 'white')
+    board = EMPTY_BOARD.copy()
+    board[(p.x, p.y)] = p
     assert p.possible_moves(board) == []
