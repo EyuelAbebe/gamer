@@ -185,6 +185,7 @@ class Match(object):
     def __init__(self):
         super(Match, self).__init__()
         self.board = self._create_blank_board()
+        self.pieces = self.board.viewvalues()
 
     def move(self, start_a1, end_a1):
         """Update board with the moved piece if move is valid.
@@ -247,7 +248,7 @@ class Match(object):
         assert len(args) == 8
         return vbar + u''.join((tpl.format(pieces[a]) for a in args))
 
-    def _game(self, position):
+    def _view(self, position):
         yield topline
         yield self._inter(*position[0])
         for row in position[1:]:
