@@ -32,3 +32,19 @@ def test_is_coord_on_board():
         assert engine._is_coord_on_board(coord) is True
     for coord in INVALID_COORDS:
         assert engine._is_coord_on_board(coord) is False
+
+
+def test_instantiate_Piece():
+    for coord in VALID_COORDS:
+        p = engine.Piece(coord)
+        assert isinstance(p, engine.Piece)
+        assert p.x, p.y == coord
+
+
+def test_instantiate_SimpleUnit():
+    for color in ['white', 'black']:
+        for coord in VALID_COORDS:
+            p = engine.SimpleUnit(coord, color)
+            assert isinstance(p, engine.SimpleUnit)
+            assert p.x, p.y == coord
+            assert p.color == color
