@@ -17,6 +17,7 @@ _coord_to_a1 = dict(
 _a1_to_coord = dict(
     [(chr(x) + chr(y), (x, y)) for x in xrange(97, 105) for y in xrange(49, 57)]
     )
+POSITIONS = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
 
 # Elements of visualization
 pieces = u''.join(unichr(9812 + x) for x in range(12))
@@ -226,11 +227,10 @@ class Match(object):
             self.board[(97 + i, 50)] = Pawn((97 + i, 50), 'white')
 
     def _make_square(self):
-        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
         square = [[] for i in xrange(8)]
         current_line = 0
         line_count = 0
-        for pos in positions:
+        for pos in POSITIONS:
             if line_count == 8:
                 current_line += 1
                 line_count = 0
@@ -350,9 +350,8 @@ class Match(object):
         return king
 
     def _board_to_str(self):
-        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
         square = []
-        for i, pos in enumerate(positions):
+        for i, pos in enumerate(POSITIONS):
             if (i != 0) and (i % 8 == 0):
                 square.append("/")
             if self.board[pos]:
@@ -371,10 +370,9 @@ class Match(object):
             'p': Pawn,
             '1': None
         }
-        positions = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
         board = {}
         str_ = str_.replace("/", "")
-        for i, pos in enumerate(positions):
+        for i, pos in enumerate(POSITIONS):
             unit = units[str_[i].lower()]
             if unit is not None:
                 if str_[i].isupper():
