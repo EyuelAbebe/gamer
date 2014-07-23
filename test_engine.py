@@ -25,3 +25,10 @@ def test_a1_to_coord():
         assert engine._a1_to_coord.get(a1, False) is not False
     for a1 in INVALID_A1:
         assert engine._a1_to_coord.get(a1, False) is False
+
+
+def test_is_coord_on_board():
+    for coord in VALID_COORDS:
+        assert engine._is_coord_on_board(coord) is True
+    for coord in INVALID_COORDS:
+        assert engine._is_coord_on_board(coord) is False
