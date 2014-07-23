@@ -110,7 +110,7 @@ def test_SimpleUnit_moving_into_ally():
     board[(p.x, p.y)] = p
     board[(q.x, q.y)] = q
     new_board = p.move(VALID_COORDS[1], board)
-    assert new_board is None
+    assert new_board == board
 
 
 def test_SimpleUnit_moving_off_board():
@@ -119,7 +119,7 @@ def test_SimpleUnit_moving_off_board():
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
     new_board = p.move((105, 56), board)
-    assert new_board is None
+    assert new_board == board
 
 
 def test_SimpleUnit_moving_into_enemy():
@@ -180,7 +180,19 @@ def test_move_unit_in_Match_to_enemy_a1():
     q = engine.SimpleUnit((97, 51), 'black')
     m.board[(97, 51)] = q
     p = m.board[VALID_COORDS[1]]
+    assert q in m.board.values()
     m.move('a2', 'a3')
     assert m.board[VALID_COORDS[1]] is None
     assert m.board[VALID_COORDS[2]] is p
     assert q not in m.board.values()
+
+
+def test_move_unit_via_Match_into_ally_a1():
+    u"""Assert moving via Match to an ally pos does not update board state."""
+    m = engine.Match()
+    m._add_simple_units()
+    p = m.board[VALID_COORDS[0]]
+    q = m.board[VALID_COORDS[1]]
+    m.move('a1', 'a2')
+    assert m.board[VALID_COORDS[0]] is p
+    assert m.board[VALID_COORDS[1]] is q
