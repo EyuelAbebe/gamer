@@ -100,3 +100,13 @@ def test_assert_SimpleUnit_moves_into_empty_space():
     assert new_board[VALID_COORDS[0]] is None
     assert new_board[VALID_COORDS[1]] is p
 
+
+def test_SimpleUnit_moves_into_ally():
+    u"""Assert moves into allied units are do not return a board."""
+    p = engine.SimpleUnit(VALID_COORDS[0], 'white')
+    q = engine.SimpleUnit(VALID_COORDS[1], 'white')
+    board = EMPTY_BOARD.copy()
+    board[(p.x, p.y)] = p
+    board[(q.x, q.y)] = q
+    new_board = p.move(VALID_COORDS[1], board)
+    assert new_board is None
