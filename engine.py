@@ -267,6 +267,25 @@ class Match(object):
             color = "white"
         return self._checkmate(color)
 
+    def play_in_terminal(self):
+        white_move = True
+        won = False
+        while not won:
+            if white_move:
+                color = "white"
+            else:
+                color = "black"
+            if self._in_check(color):
+                print "{}'s king is in check!".format(color.title())
+                piece = self._find_king()
+                possible_moves = piece.possible_moves()
+            else:
+                piece, possible_moves = self._move_from(color)
+            start_a1 = _coord_to_a1[(piece.x, piece.y)]
+            end_a1 = _coord_to_a1[self._move_to(piece, possible_moves, color)]
+            self.move(start_a1, end_a1)
+            white_move = not white_move
+            won = self._match_won(color)
 
     def _move_from(self, color):
         prompt = u"{}'s turn to move:\nFrom: ".format(color.title())
@@ -330,3 +349,5 @@ class Match(object):
 if __name__ == "__main__":
     m = Match()
     m._add_starting_units()
+    m.view()
+    m.play_in_terminal()
