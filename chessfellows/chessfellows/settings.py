@@ -38,7 +38,9 @@ class Common(Configuration):
         'south',
         'chess',
         'rest_framework',
-        'registration'
+        'registration',
+        'chatrooms',
+        'polymorphic',
     )
 
     MIDDLEWARE_CLASSES = (

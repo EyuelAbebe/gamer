@@ -18,6 +18,9 @@ class Match(models.Model):
     winner = models.CharField(max_length=10, default='white')
 
 
+    class Meta:
+        verbose_name_plural="Matches"
+
 class Player(models.Model):
     user = models.OneToOneField(User)
     rating = models.PositiveSmallIntegerField(default=1200)
