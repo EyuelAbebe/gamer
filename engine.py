@@ -42,7 +42,7 @@ class Piece(object):
         if coord in self.possible_moves(board):
             board[coord], board[(self.x, self.y)] = self, None
             self.x, self.y = coord
-            return board
+        return board
 
 
 class SimpleUnit(Piece):
