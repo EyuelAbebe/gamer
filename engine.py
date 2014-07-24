@@ -51,17 +51,16 @@ class Piece(object):
             self.x, self.y = coord
         self.color = color
 
-
     def not_blocked(self, board):
         not_blocked = set()
         up = [(self.x, y) for y in xrange(self.y + 1, MAX_Y + 1)]
-        down = [(self.x, y) for y in xrange(self.y, MIN_Y, -1)]
-        left = [(x, self.y) for x in xrange(self.x, MIN_X, -1)]
-        right = [(x, self.y) for x in xrange(self.x + 1, MAX_X)]
-        ur = [(self.x + x, self.y + x) for x in xrange(8) if (self.x + x, self.y + x) in BOARD]
-        lr = [(self.x + x, self.y - x) for x in xrange(8) if (self.x + x, self.y - x) in BOARD]
-        ll = [(self.x - x, self.y - x) for x in xrange(8) if (self.x - x, self.y - x) in BOARD]
-        ul = [(self.x - x, self.y + x) for x in xrange(8) if (self.x - x, self.y + x) in BOARD]
+        down = [(self.x, y) for y in xrange(self.y - 1, MIN_Y - 1, -1)]
+        left = [(x, self.y) for x in xrange(self.x - 1, MIN_X - 1, -1)]
+        right = [(x, self.y) for x in xrange(self.x + 1, MAX_X + 1)]
+        ur = [(self.x + x, self.y + x) for x in xrange(1, 8) if (self.x + x, self.y + x) in BOARD]
+        lr = [(self.x + x, self.y - x) for x in xrange(1, 8) if (self.x + x, self.y - x) in BOARD]
+        ll = [(self.x - x, self.y - x) for x in xrange(1, 8) if (self.x - x, self.y - x) in BOARD]
+        ul = [(self.x - x, self.y + x) for x in xrange(1, 8) if (self.x - x, self.y + x) in BOARD]
         rays = [up, down, left, right, ur, lr, ll, ul]
         for ray in rays:
             for coord in ray:
@@ -70,21 +69,6 @@ class Piece(object):
                 else:
                     break
         return not_blocked
-
-        # # BROKEN
-        # new_x, new_y = coord
-        # min_x = min(new_x, self.x)
-        # min_y = min(new_y, self.y)
-        # max_x = max(new_x, self.x)
-        # max_y = max(new_y, self.y)
-        # ray = [(x, y) for x in xrange(min_x, max_x + 1) for y in (min_y, max_y + 1)]
-        # for pos in ray:
-        #     if _is_coord_on_board(pos) and pos != (self.x, self.y):
-        #         if board[pos] is not None:
-        #             print board[pos]
-        #             if board[pos].color == self.color:
-        #                 return True
-        # return False
 
     def move(self, coord, board):
         if coord in self.valid_moves(board):
@@ -155,7 +139,7 @@ class Knight(Piece):
             (1, 2), (1, -2), (-1, 2), (-1, -2)
         ]
 
-    def blocked(self, board):
+    def not_blocked(self, board):
         not_blocked = set()
         up = [(self.x, y) for y in xrange(self.y + 1, MAX_Y + 1)]
         down = [(self.x, y) for y in xrange(self.y, MIN_Y, -1)]
