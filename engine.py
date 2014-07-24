@@ -11,13 +11,15 @@
 # Refer to coordinate position as 'coord'
 # Refer to algebraic position as 'a1'
 
+MIN_X, MAX_X = 97, 104
+MIN_Y, MAX_Y = 49, 56
 _coord_to_a1 = dict(
-    [((x, y), chr(x) + chr(y)) for x in xrange(97, 105) for y in xrange(49, 57)]
+    [((x, y), chr(x) + chr(y)) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MIN_Y, MAX_Y + 1)]
     )
 _a1_to_coord = dict(
-    [(chr(x) + chr(y), (x, y)) for x in xrange(97, 105) for y in xrange(49, 57)]
+    [(chr(x) + chr(y), (x, y)) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MIN_Y, MAX_Y + 1)]
     )
-POSITIONS = [(x, y) for y in xrange(56, 48, -1) for x in xrange(97, 105)]
+POSITIONS = [(x, y) for y in xrange(MAX_Y, MIN_Y - 1, -1) for x in xrange(MIN_X, MAX_X + 1)]
 
 # Elements of visualization
 pieces = u''.join(unichr(9812 + x) for x in range(12))
@@ -65,8 +67,10 @@ class SimpleUnit(Piece):
         self.color = color
         if color == 'white':
             self.moves = [(0, 1)]
+            self.viz = 1
         else:
             self.moves = [(0, -1)]
+            self.viz = -1
 
     def possible_moves(self, board):
         valid_moves = []
