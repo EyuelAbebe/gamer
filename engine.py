@@ -165,8 +165,10 @@ class Queen(Piece):
             self.viz = -5
         else:
             self.viz = 5
-        self.moves = [(x, y) for x in xrange(1, 8) for y in xrange(1, 8)]
-        self.moves += [(-x, -y) for x in xrange(1, 8) for y in xrange(1, 8)]
+        self.moves = [(x, 0) for x in xrange(-7, 8) if x is not 0]
+        self.moves += [(0, x) for x in xrange(-7, 8) if x is not 0]
+        self.moves += [(x, x) for x in xrange(-7, 8) if x is not 0]
+        self.moves += [(x, -x) for x in xrange(-7, 8) if x is not 0]
 
     def __repr__(self):
         if self.color == 'black':
