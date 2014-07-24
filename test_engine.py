@@ -225,6 +225,7 @@ def test_blocked_Queen_blocked_all_sides_same_color():
 
 
 def test_blocked_Queen_blocked_all_sides_same_color_two_squares_out():
+    u"""Assert Queen's movement stopped by same units two squars out."""
     m = engine.Match()
     coords = [(x, y) for x in xrange(98, 103, 2) for y in xrange(50, 55, 2)]
     for coord in coords:
