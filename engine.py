@@ -231,6 +231,20 @@ class King(Piece):
             self.viz = 6
         self.moves = [(x, y) for x in [-1, 0, 1] for y in [-1, 0, 1]]
 
+    def valid_moves(self, board):
+        move_set = self.move_set()
+        not_blocked = self.not_blocked(board)
+        moves_on_board = move_set.intersection(BOARD)
+        valid_moves = not_blocked.intersection(moves_on_board)
+        for move in valid_moves:
+            for coord in BOARD:
+                if board[coord]:
+                    other_color = board[coord].color
+                    other_moves = board[coord].valid_moves()
+                    if other_color != self.color and coord in other_moves:
+                        valid_moves.remove(move)
+        return valid_moves
+
     def __repr__(self):
         if self.color == 'black':
             return 'k'
