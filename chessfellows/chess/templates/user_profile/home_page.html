@@ -1,6 +1,17 @@
 {% extends "user_profile/profile_base.html" %}
-
+{% load staticfiles %}
 
 {% block profile %}
+
+<div id="board" style="width: 400px"></div>
+<input type="button" id="startBtn" value="Start" />
+<input type="button" id="clearBtn" value="Clear" />
+
+<script src="{% static 'js/match.js' %}"></script>
+<br><br>
+<form action="." id="make_move" method="post">
+Your Move: <input name="my_move" type="text" placeholder="From-To" />
+<input type="submit" value="GO">
+</form>
 
 {% endblock %}

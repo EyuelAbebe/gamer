@@ -2,6 +2,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render
 from chess.models import Player, Match
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from board import Board
 
 
 def landing(request):
@@ -9,7 +11,13 @@ def landing(request):
     return render(request, 'chess/landing.html', context)
 
 
+@csrf_exempt
 def home_page(request):
+    chess_board = Board()
+    for i in request.POST:
+        print request.POST[i]
+        chess_board.set_board(request.POST[i])
+    print chess_board.board
     return render_to_response('user_profile/home_page.html',
                               context_instance={})
 
@@ -54,3 +62,4 @@ def profile_page(request):
                                        })
     return render_to_response('user_profile/profile.html',
                               context_instance=context)
+
