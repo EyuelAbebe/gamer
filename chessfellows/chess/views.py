@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from board import Board
-from engine import Match as table
+import engine
 
 def signUp(request):
     if request.method == 'POST':
@@ -26,10 +26,11 @@ def signUp(request):
 def landing(request):
     sign_up_form = SignUpForm()
     context = {}
-    return render(request, 'chess/landing.html', locals(), context=RequestContext(request))
+    return render(request, 'chess/landing.html', locals())
 
 
 def home_page(request):
+    print str(request)
     return render_to_response('user_profile/home_page.html',
                               context_instance={})
 
@@ -42,9 +43,18 @@ def start_table(request):
 @csrf_exempt
 def make_move(request):
     # print str(request.POST['position'])
-    m = table()
+    m = engine.Match()
+    pos = request.POST['position']
+    pos = pos.replace('2', '11')
+    pos = pos.replace('3', '111')
+    pos = pos.replace('4', '1111')
+    pos = pos.replace('5', '11111')
+    pos = pos.replace('6', '111111')
+    pos = pos.replace('7', '1111111')
+    pos = pos.replace('8', '11111111')
+    # import pdb; pdb.set_trace()
     new_move, won = m._play_web(
-        request.POST['position'],
+        pos,
         str(request.POST['move']),
         True)
     # old_board = Board(request.POST['position'])
@@ -52,6 +62,11 @@ def make_move(request):
     # new_move = old_board.board
     response = {'moves': new_move}
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def get_player_from_match(player_id):
+
+    pass
 
 
 def history_page(request):
