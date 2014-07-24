@@ -222,3 +222,16 @@ def test_blocked_Queen_blocked_all_sides_same_color():
         m.board[coord] = q
     q = m.board[(100, 52)]
     assert q.not_blocked(m.board) == set()
+
+
+def test_blocked_Queen_blocked_all_sides_same_color_two_squares_out():
+    m = engine.Match()
+    coords = [(x, y) for x in xrange(98, 103, 2) for y in xrange(50, 55, 2)]
+    for coord in coords:
+        q = engine.Queen(coord, "white")
+        m.board[coord] = q
+    q = m.board[(100, 52)]
+    m.view()
+    expected = set([(x, y) for x in xrange(99, 102) for y in xrange(51, 54)])
+    expected.remove((100, 52))
+    assert q.not_blocked(m.board) == expected
