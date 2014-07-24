@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 admin.autodiscover()
 
@@ -13,3 +13,5 @@ urlpatterns = patterns('',
     url(r'^chat/', include('chatrooms.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
 )
+
+urlpatterns += staticfiles_urlpatterns()

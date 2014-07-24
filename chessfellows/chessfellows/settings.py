@@ -41,6 +41,7 @@ class Common(Configuration):
         'registration',
         'chatrooms',
         'polymorphic',
+        'gunicorn',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -93,7 +94,7 @@ class Common(Configuration):
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
     ACCOUNT_ACTIVATION_DAYS = 7
-
+    CHATROOMS_HANDLERS_CLASS = 'chatrooms.utils.handlers.MessageHandler'
 
 class Dev(Common):
     DEBUG = True
