@@ -41,6 +41,7 @@ class Common(Configuration):
         'registration',
         'chatrooms',
         'polymorphic',
+        'bootstrap3',
     )
 
     MIDDLEWARE_CLASSES = (

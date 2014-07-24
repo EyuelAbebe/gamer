@@ -1,12 +1,31 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, render
-from chess.models import Player, Match
+from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
+from .models import Player, Match
 from django.contrib.auth.models import User
+from .forms import PlayerForm, UserForm, SignUpForm
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+from board import Board
+
+def signUp(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/accounts/register_success')
+    args = {}
+    args.update(csrf(request))
+    args['form'] = SignUpForm()
+    print args
+    return render(request, 'register.html', args)
 
 
 def landing(request):
+    sign_up_form = SignUpForm()
     context = {}
-    return render(request, 'chess/landing.html', context)
+    return render(request, 'chess/landing.html', locals(), context=RequestContext(request))
 
 
 def home_page(request):
@@ -14,16 +33,57 @@ def home_page(request):
                               context_instance={})
 
 
+def start_table(request):
+
+    return render_to_response('user_profile/start_table.html',
+                              context_instance={})
+
+@csrf_exempt
+def make_move(request):
+    # print str(request.POST['position'])
+    old_board = Board(request.POST['position'])
+    old_board.set_board(str(request.POST['move']))
+    new_move = old_board.board
+    response = {'moves': new_move}
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
 def history_page(request):
     return render_to_response('user_profile/history_page.html',
                               context_instance={})
 
 
+def update_user(request):
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+    else:
+
+        form = UserForm(instance=request.user)
+
+    return HttpResponseRedirect('/accounts/home/')
+
+
+def update_player(request):
+    if request.method == "POST":
+        form = PlayerForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserForm(instance=request.user)
+
+    return HttpResponseRedirect('/accounts/home/')
+
+
 def profile_page(request):
     """Returns profile page for a logged in user."""
 
-    user_ = get_object_or_404(User, pk=request.user.id)
-    player = get_object_or_404(Player, user=request.user)
+
+    user_ = request.user
+    player = get_object_or_404(Player, user=user_)
+    user_form = UserForm(instance=user_)
+    player_form = PlayerForm(instance=player)
     player_info = {'age': player.age,
                    'country': player.country,
                    'photo': player.photo,
@@ -53,4 +113,5 @@ def profile_page(request):
                                        'player': player_info
                                        })
     return render_to_response('user_profile/profile.html',
+                              locals(),
                               context_instance=context)

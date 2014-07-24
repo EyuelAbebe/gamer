@@ -1,15 +1,8 @@
 {% extends "user_profile/profile_base.html" %}
 
 {% block profile %}
-   <div class="col-md-10">
-                <div class="panel top">
-                    <img class="pic img-circle" src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg" alt="...">
-                    <div class="name"><small>{{ user.last_name }}, {{ user.first_name }} </small></div>
-                    <div class="rating"><small>{{ rating }} </small></div>
-                    <a href="#" class="btn btn-xs btn-primary pull-right" style="margin:10px;"><span class="glyphicon glyphicon-picture"></span> Change cover</a>
-                </div>
+   <div class="col-md-10" >
 
-        <br><br><br>
 
         <ul class="nav nav-tabs" id="myTab">
           <li><a href="#personal" data-toggle="tab"><i class="fa fa-file-text-o"></i> Peronal Info</a></li>
@@ -20,34 +13,56 @@
         <div class="tab-content">
 
             <div class="tab-pane" id="personal">
-
                 <div class="container">
                   <div class="row">
                     <div class="col-md-8">
-
                       <div class="panel panel-default">
                             <div class="panel-body">
-                                    <div class="row">
-                                      <div class="col-xs-12 col-sm-4 text-center">
-                                                <img src="http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg" alt="" class="center-block img-circle img-responsive">
-                                                          <h6>Upload a different photo...</h6>
-                                                          <input type="file" class="form-control">
-                                        </div><!--/col-->
+                                    <div class="row" >
+                                      <div class="col-xs-12 col-sm-4 text-center" id="player_info">
+                                                <img src="../../static/img/default_user_photo.jpg" alt="" class="center-block img-circle img-responsive">
+                                                          <h6>Age: {{ player.age }}</h6>
+                                                          <h6>Country: {{ player.country }}</h6>
+                                                <button id ="edit_player_button"class="btn btn-success btn-group-sm"><i class="icon-white icon-heart"></i> Edit profile Information </button>
+                                      </div><!--/col-->
+
+                                     <div class="col-xs-12 col-sm-4 text-center" id="edit_player_info">
+
+                                            {# Load the tag library #}
+                                            {% load bootstrap3 %}
+
+                                            {# Load CSS and JavaScript #}
+                                            {% bootstrap_css %}
+                                            {% bootstrap_javascript %}
+
+                                            {# Display django.contrib.messages as Bootstrap alerts #}
+                                            {% bootstrap_messages %}
+
+                                            {# Display a form #}
+
+                                            <form method="post" class="form" id="save_photo_info">{% csrf_token %}
+                                              {% bootstrap_form player_form %}
+                                              {% bootstrap_form_errors player_form layout='inline' %}
+                                                <div class="form-group">
+                                                    <label class="col-md-3 control-label"></label>
+                                                    <div class="col-md-8">
+                                                      <input type="submit" class="btn btn-primary btn-group-sm" value="Save Changes">
+                                                      <input id="profile_info_cancel" type="reset" class="btn btn-group-sm" value="Cancel">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                      </div><!--/col-->
+
                                         <div class="col-xs-12 col-sm-8" id='personal_info'>
-                                            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-                                            <p><strong>Username: </strong>{{ user.username }}</p>
-                                            <p><strong>Age: </strong> {{ player.age }} </p>
-                                            <p><strong>Country: </strong> {{ player.country }} </p>
-                                            <p><strong>Ratings: </strong>
+                                            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+                                            <p>Username: {{ user.username }}</p>
+                                            <p>Ratings:
                                                 <span class="label label-info tags">Regular: {{ regular.rating }}</span>
                                                 <span class="label label-info tags">Blitz: {{ blitz.rating }}</span>
                                                 <span class="label label-info tags">Bullet: {{ bullet.rating }}</span>
                                             </p>
-                                            <p><strong>Date Joined: </strong>{{ player.date }}</p>
-
-                                            <br><br><br>
-
-                                            <button id ="edit_button"class="btn btn-success btn-large"><i class="icon-white icon-heart"></i> Edit Information </button>
+                                            <p>Date Joined: {{ player.date }}</p>
+                                            <button id ="edit_button"class="btn btn-success btn-group-small"><i class="icon-white icon-heart"></i> Edit Information </button>
 
                                         </div><!--/col-->
 
@@ -55,69 +70,46 @@
                                         <div class="col-xs-12 col-sm-8" id='edit_personal_info'>
                                             <h1>Edit Information</h1>
                                             <hr>
+
                                             <div class="row">
                                               <div class="col-md-9 personal-info">
                                                 <h3>Personal info</h3>
 
-                                                <form class="form-horizontal" role="form">
-                                                  <div class="form-group">
-                                                    <label class="col-lg-3 control-label">First name:</label>
-                                                    <div class="col-lg-8">
-                                                      <input class="form-control" type="text" value="{{ user.first_name }}">
-                                                    </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label class="col-lg-3 control-label">Last name:</label>
-                                                    <div class="col-lg-8">
-                                                      <input class="form-control" type="text" value="{{ user.last_name }}">
-                                                    </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label class="col-lg-3 control-label">Email:</label>
-                                                    <div class="col-lg-8">
-                                                      <input class="form-control" type="text" value="{{ user.email }}">
-                                                    </div>
-                                                  </div>
+                                                {# Load the tag library #}
+                                                {% load bootstrap3 %}
 
-                                                  <div class="form-group">
-                                                    <label class="col-md-3 control-label">Username:</label>
-                                                    <div class="col-md-8">
-                                                      <input class="form-control" type="text" value="{{ user.username }}">
-                                                    </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label class="col-md-3 control-label">Password:</label>
-                                                    <div class="col-md-8">
-                                                      <input class="form-control" type="password" value="">
-                                                    </div>
-                                                  </div>
-                                                  <div class="form-group">
-                                                    <label class="col-md-3 control-label">Confirm password:</label>
-                                                    <div class="col-md-8">
-                                                      <input class="form-control" type="password" value="">
-                                                    </div>
-                                                  </div>
+                                                {# Load CSS and JavaScript #}
+                                                {% bootstrap_css %}
+                                                {% bootstrap_javascript %}
+
+                                                {# Display django.contrib.messages as Bootstrap alerts #}
+                                                {% bootstrap_messages %}
+
+                                                {# Display a form #}
+
+                                                <form method="post" class="form" id="save_personal_info">{% csrf_token %}
+                                                  {% bootstrap_form user_form %}
+                                                  {% bootstrap_form_errors user_form layout='inline' %}
+
                                                   <div class="form-group">
                                                     <label class="col-md-3 control-label"></label>
                                                     <div class="col-md-8">
-                                                      <input id="save_personal_info" type="submit" class="btn btn-primary" value="Save Changes">
+                                                      <input type="submit" class="btn btn-primary" value="Save Changes">
                                                       <span></span>
                                                       <input id="personal_info_cancel" type="reset" class="btn btn-default" value="Cancel">
                                                     </div>
                                                   </div>
                                                 </form>
+
                                               </div>
                                           </div>
                                         </div>
                                         <hr>
-
-
-
                                     </div><!--/row-->
-                              </div><!--/panel-body-->
-                          </div><!--/panel-->
-                        </div>
-                      </div>
+                            </div><!--/panel-body-->
+                      </div><!--/panel-->
+                    </div>
+                  </div>
                 </div>
             </div>
 
@@ -170,16 +162,7 @@
               </div>
 
             <div class="tab-pane" id="progress">
-                    <a type="button" data-toggle="collapse" data-target="#s1">
-                    <div class="btn-toolbar well well-sm" role="toolbar"  style="margin:0px;">
-                      <div class="btn-group"><input type="checkbox"></div>
-                      <div class="btn-group col-md-3">Kumar</div>
-                      <div class="btn-group col-md-8"><b>This is reply from Bootstrap plugin</b> <div class="pull-right"><i class="glyphicon glyphicon-time"></i> 12:30 AM</div> </div>
-                    </div>
-                </a>
-                <div id="s1" class="collapse out well">This is the message body1</div>
-                <br>
-                <button class="btn btn-primary btn-xs"><i class="fa fa-check-square-o"></i> Delete Checked Item's</button>
+                    <canvas id="myChart" width="800" height="400"></canvas>
               </div>
 
         </div>
@@ -188,5 +171,3 @@
 {% endblock %}
 
 
-
-        <!--http://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/twDq00QDud4/s120-c/default_user_photo.jpg-->

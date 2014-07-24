@@ -60,6 +60,9 @@ chessfellows/access
 
 
 chessfellows/chess/migrations/
-
+chessfellows/uploaded_images/
+chessfellows/static/admin/
+chessfellows/static/rest_framework/
 static/admin/
 static/rest_framework/
+
