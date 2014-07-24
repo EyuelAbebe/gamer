@@ -64,7 +64,7 @@ def test_SimpleUnit_possible_moves_empty_space():
     p = engine.SimpleUnit(VALID_COORDS[0], 'white')
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
-    assert p.possible_moves(board) == [(p.x, p.y + 1)]
+    assert p.valid_moves(board) == set([(p.x, p.y + 1)])
 
 
 def test_SimpleUnit_possible_moves_into_ally():
@@ -74,7 +74,7 @@ def test_SimpleUnit_possible_moves_into_ally():
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
     board[(q.x, q.y)] = q
-    assert p.possible_moves(board) == []
+    assert p.valid_moves(board) == set()
 
 
 def test_SimpleUnit_possible_moves_off_board():
@@ -82,7 +82,7 @@ def test_SimpleUnit_possible_moves_off_board():
     p = engine.SimpleUnit(VALID_COORDS[-1], 'white')
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
-    assert p.possible_moves(board) == []
+    assert p.valid_moves(board) == set()
 
 
 def test_SimpleUnit_possible_moves_into_enemy():
@@ -92,7 +92,7 @@ def test_SimpleUnit_possible_moves_into_enemy():
     board = EMPTY_BOARD.copy()
     board[(p.x, p.y)] = p
     board[(q.x, q.y)] = q
-    assert p.possible_moves(board) == [(p.x, p.y + 1)]
+    assert p.valid_moves(board) == set([(p.x, p.y + 1)])
 
 
 def test_assert_SimpleUnit_moving_into_empty_space():
