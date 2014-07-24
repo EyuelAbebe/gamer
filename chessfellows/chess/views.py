@@ -40,7 +40,6 @@ def update_user(request):
         form = UserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-        import pdb;pdb.set_trace()
     else:
 
         form = UserForm(instance=request.user)
@@ -56,7 +55,7 @@ def update_player(request):
     else:
         form = UserForm(instance=request.user)
 
-    return HttpResponseRedirect('/accounts/profile/')
+    return HttpResponseRedirect('/accounts/home/')
 
 
 def profile_page(request):

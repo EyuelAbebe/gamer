@@ -60,24 +60,9 @@ chessfellows/access
 
 
 chessfellows/chess/migrations/
-
-static/admin/
-static/rest_framework/
 chessfellows/uploaded_images/
 chessfellows/static/admin/
 chessfellows/static/rest_framework/
-chessfellows/chess/static/less/
-chessfellows/chess/static/js/jquery-1.11.0.js
-chessfellows/chess/static/js/jquery.easing.min.js
-chessfellows/chess/static/font-awesome-4.1.0/
-chessfellows/chess/static/fonts/
-chessfellows/chess/static/img/
-chessfellows/chess/static/js/Chart.js
-chessfellows/chess/static/js/bootstrap.js
-chessfellows/chess/static/js/bootstrap.min.js
-chessfellows/chess/static/js/country.js
-chessfellows/chess/static/css/bootstrap.css
-chessfellows/chess/static/css/bootstrap.min.css
+static/admin/
+static/rest_framework/
 
-chessfellows/chess/static/css/grayscale.css
-chessfellows/chess/static/js/grayscale.js
