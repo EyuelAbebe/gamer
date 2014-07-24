@@ -44,7 +44,7 @@ def test_is_coord_on_board():
 def test_instantiate_Piece():
     u"""Assert an instance of Piece has the expected attributes."""
     for coord in VALID_COORDS:
-        p = engine.Piece(coord)
+        p = engine.Piece(coord, "white")
         assert isinstance(p, engine.Piece)
         assert p.x, p.y == coord
 
@@ -203,17 +203,20 @@ def test_move_unit_via_Match_into_ally_a1():
 def test_piece_between_Queen_empty_board():
     u"""Assert a Queen in the middle of an empty board can move in any dir."""
     m = engine.Match()
-    m._create_blank_board()
     q = engine.Queen((100, 52), "white")
     m.board[(100, 52)] = q
-    print q.not_blocked(m.board)
-    print q.move_set().intersection(engine.BOARD)
-    assert q.not_blocked(m.board) == q.move_set().intersection(engine.BOARD)
+    m.view()
+    not_blocked = q.not_blocked(m.board)
+    test_coords = q.move_set().intersection(engine.BOARD)
+    for i in not_blocked:
+        p = engine.Pawn(i, "black")
+        m.board[i] = p
+    m.view()
+    assert q.not_blocked(m.board) == test_coords
 
 
 def test_blocked_Queen_blocked_all_sides_same_color():
     m = engine.Match()
-    m._create_blank_board()
     for coord in [(x, y) for x in xrange(99, 102) for y in xrange(51, 54)]:
         q = engine.Queen(coord, "white")
         m.board[coord] = q
