@@ -36,25 +36,20 @@ tpl = u' {0} ' + vbar
 
 def _is_coord_on_board(coord):
     u"""Return True if coordinate is on the board."""
-    x, y = coord
-    if _coord_to_a1.get((x, y), False):
-        return True
-    else:
-        return False
 
 
 class Piece(object):
     """Parent class for chess pieces."""
-    def __init__(self, coord):
+    def __init__(self, coord, color):
         """Instantiate a piece at a coordinate position."""
         super(Piece, self).__init__()
         if isinstance(coord, str):
             self.x, self.y = _a1_to_coord[coord]
         else:
             self.x, self.y = coord
+        self.color = color
 
     def move(self, coord, board):
-        if coord in self.possible_moves(board):
             board[coord], board[(self.x, self.y)] = self, None
             self.x, self.y = coord
         return board
@@ -63,8 +58,7 @@ class Piece(object):
 class SimpleUnit(Piece):
     """Returns a SimpleUnit to test position/movement basics."""
     def __init__(self, coord, color):
-        super(SimpleUnit, self).__init__(coord)
-        self.color = color
+        super(SimpleUnit, self).__init__(coord, color)
         if color == 'white':
             self.moves = [(0, 1)]
             self.viz = 1
@@ -89,7 +83,7 @@ class SimpleUnit(Piece):
             return 'Sw:({},{})'.format(self.x, self.y)
 
 
-class Pawn(SimpleUnit):
+class Pawn(Piece):
     """docstring for Pawn"""
     def __init__(self, coord, color):
         super(Pawn, self).__init__(coord, color)
@@ -105,7 +99,7 @@ class Pawn(SimpleUnit):
             return 'P'
 
 
-class Knight(SimpleUnit):
+class Knight(Piece):
     """docstring for Knight"""
     def __init__(self, coord, color):
         super(Knight, self).__init__(coord, color)
@@ -125,7 +119,7 @@ class Knight(SimpleUnit):
             return 'N'
 
 
-class Bishop(SimpleUnit):
+class Bishop(Piece):
     """docstring for Bishop"""
     def __init__(self, coord, color):
         super(Bishop, self).__init__(coord, color)
@@ -143,7 +137,7 @@ class Bishop(SimpleUnit):
             return 'B'
 
 
-class Rook(SimpleUnit):
+class Rook(Piece):
     """docstring for Rook"""
     def __init__(self, coord, color):
         super(Rook, self).__init__(coord, color)
@@ -163,7 +157,7 @@ class Rook(SimpleUnit):
             return 'R'
 
 
-class Queen(SimpleUnit):
+class Queen(Piece):
     """docstring for Queen"""
     def __init__(self, coord, color):
         super(Queen, self).__init__(coord, color)
@@ -181,7 +175,7 @@ class Queen(SimpleUnit):
             return 'Q'
 
 
-class King(SimpleUnit):
+class King(Piece):
     """docstring for King"""
     def __init__(self, coord, color):
         super(King, self).__init__(coord, color)
