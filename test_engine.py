@@ -198,3 +198,24 @@ def test_move_unit_via_Match_into_ally_a1():
     m.move('a1', 'a2')
     assert m.board[VALID_COORDS[0]] is p
     assert m.board[VALID_COORDS[1]] is q
+
+
+def test_piece_between_Queen_empty_board():
+    u"""Assert a Queen in the middle of an empty board can move in any dir."""
+    m = engine.Match()
+    m._create_blank_board()
+    q = engine.Queen((100, 52), "white")
+    m.board[(100, 52)] = q
+    print q.not_blocked(m.board)
+    print q.move_set().intersection(engine.BOARD)
+    assert q.not_blocked(m.board) == q.move_set().intersection(engine.BOARD)
+
+
+def test_blocked_Queen_blocked_all_sides_same_color():
+    m = engine.Match()
+    m._create_blank_board()
+    for coord in [(x, y) for x in xrange(99, 102) for y in xrange(51, 54)]:
+        q = engine.Queen(coord, "white")
+        m.board[coord] = q
+    q = m.board[(100, 52)]
+    assert q.not_blocked(m.board) == set()
