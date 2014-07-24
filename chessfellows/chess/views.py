@@ -4,6 +4,29 @@ from .models import Player, Match
 from django.contrib.auth.models import User
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
+from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse
+import django.dispatch
+
+
+def Login(request):
+
+    if request.user.is_authenticated():
+       return HttpResponseRedirect(reverse('profile'))
+
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user_ = authenticate(username=username, password=password)
+        if user_ is not None:
+            login(request, user_)
+
+            return HttpResponseRedirect(reverse('home'))
+
+
+    return HttpResponseRedirect(reverse('auth_login'))
 
 
 def signUp(request):
@@ -11,7 +34,7 @@ def signUp(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/accounts/register_success')
+            return HttpResponseRedirect('/accounts/register_success/')
     args = {}
     args.update(csrf(request))
     args['form'] = SignUpForm()
@@ -21,18 +44,19 @@ def signUp(request):
 
 def landing(request):
     sign_up_form = SignUpForm()
-    context = {}
-    return render(request, 'chess/landing.html', locals(), context=RequestContext(request))
+    return render(request, 'chess/landing.html', locals(), context_instance=RequestContext(request))
 
 
 def home_page(request):
+    all_players = Player.objects.all()
     return render_to_response('user_profile/home_page.html',
-                              context_instance={})
+                              locals(),
+                              context_instance=RequestContext(request))
 
 
 def history_page(request):
     return render_to_response('user_profile/history_page.html',
-                              context_instance={})
+                              context_instance=RequestContext(request))
 
 
 def update_user(request):
@@ -48,8 +72,11 @@ def update_user(request):
 
 
 def update_player(request):
+    player = get_object_or_404(Player, user=request.user)
+    import pdb; pdb.set_trace()
     if request.method == "POST":
-        form = PlayerForm(request.POST, request.FILES)
+        form = PlayerForm(request.POST, request.FILES, instance=player)
+
         if form.is_valid():
             form.save()
     else:

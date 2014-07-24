@@ -2,11 +2,23 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from chessfellows import settings
-from django.forms import ModelForm
 import datetime
+from django.db.models.signals import post_init, post_save
 
 game_type_choices = ((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
 
+
+
+def create_profile(sender, **kwargs):
+    user_ = kwargs['instance']
+    try:
+        Player.objects.get(user=user_)
+    except Player.DoesNotExist:
+        p = Player(user=user_)
+        p.save()
+
+
+post_save.connect(create_profile, sender=User)
 
 def get_file_owner_username(instance, filename):
     parts = [instance.user.username]

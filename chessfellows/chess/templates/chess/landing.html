@@ -49,10 +49,7 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
                 <ul class="nav navbar-nav">
-                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
+
                     <li>
                         <a class="page-scroll" href="#about">About</a>
                     </li>
@@ -63,7 +60,7 @@
                         <a class="page-scroll" href="#contact">Contact</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#login">Log In</a>
+                        <a class="page-scroll" href="{% url 'auth_login'%}">Log In</a>
                     </li>
                 </ul>
             </div>
@@ -81,7 +78,7 @@
                         <h1 class="brand-heading">CHESSFELLOWS</h1>
                         <p class="intro-text">ChessFellows is a chess community that enables you to play, talk with your opponents, and track your ratings.</p>
                         <p class="lead">
-                          <a href="#signup" class="btn btn-lg btn-default page-scroll">Sign up!</a>
+                          <a href="{% url 'registration_register'%}" class="btn btn-lg btn-default page-scroll">Sign up!</a>
                         </p>
                         <a href="#about" class="btn btn-circle page-scroll">
                             <i class="fa fa-angle-double-down animated"></i>
@@ -97,9 +94,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>About ChessFellows</h2>
-                <p>Grayscale is a free Bootstrap 3 theme created by Start Bootstrap. It can be yours right now, simply download the template on <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-                <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-                <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+                <p>ChessFellows is a chess community that enables you to play, talk with your opponents, and track your ratings.</p>
             </div>
         </div>
     </section>
@@ -111,7 +106,7 @@
                 <div class="col-lg-8 col-lg-offset-2">
                     <h2>ChessFellows Preview</h2>
                     <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-                    <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
+                    <a href="{url 'landing'}" class="btn btn-default btn-lg">Sign Up for an account and enjoy chess the right way.</a>
                 </div>
             </div>
         </div>
@@ -184,7 +179,7 @@
                     {% bootstrap_messages %}
 
                     {# Display a form #}
-                <form action = "/accounts/register/" method="post" action=".">
+                <form action = "/register/" method="post" action=".">
                   {% csrf_token %}
                   {% bootstrap_form sign_up_form %}
 

@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    # url(r'updatePlayerInfo/', views.update_player, name='update_pi'),
     url(r'', include('chess.urls')),
     url(r'', include('registration.backends.default.urls')),
 )
