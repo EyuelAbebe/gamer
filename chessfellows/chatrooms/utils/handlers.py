@@ -42,6 +42,7 @@ class MessageHandler(object):
         4 - Returns the created message
 
         """
+       # import pdb; pdb.set_trace();
         room = Room.objects.get(id=room_id)
         fields = {
             'room': room,

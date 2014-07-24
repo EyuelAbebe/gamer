@@ -141,6 +141,7 @@ class ChatView(object):
         chat_message_received signal
 
         """
+        #import pdb; pdb.set_trace()
         try:
             room_id = int(request.POST['room_id'])
             message = request.POST['message']
