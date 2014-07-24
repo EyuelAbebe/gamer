@@ -1,10 +1,13 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
 from .models import Player, Match
 from django.contrib.auth.models import User
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
+import json
 
+from board import Board
 
 def signUp(request):
     if request.method == 'POST':
@@ -28,6 +31,21 @@ def landing(request):
 def home_page(request):
     return render_to_response('user_profile/home_page.html',
                               context_instance={})
+
+
+def start_table(request):
+
+    return render_to_response('user_profile/start_table.html',
+                              context_instance={})
+
+@csrf_exempt
+def make_move(request):
+    # print str(request.POST['position'])
+    old_board = Board(request.POST['position'])
+    old_board.set_board(str(request.POST['move']))
+    new_move = old_board.board
+    response = {'moves': new_move}
+    return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
 def history_page(request):
