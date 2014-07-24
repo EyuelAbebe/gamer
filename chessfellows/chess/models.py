@@ -110,4 +110,12 @@ class Player(models.Model):
         super(Player, self).save(*args, **kwargs)
 
 
+class Boards(models.Model):
+    white = models.ForeignKey(User)
+    black = models.ForeignKey(User)
+    state = models.CharField(max_length=100)
+    id = models.CharField(primary_key=True, unique=True, default="")
 
+    def save(self, *args, **kwargs):
+        id = float(self.white)
+        super(Boards, self)._save(*args, **kwargs)
