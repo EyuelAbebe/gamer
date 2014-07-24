@@ -2,6 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import User
 from chessfellows import settings
+from django.forms import ModelForm
 import datetime
 
 game_type_choices = ((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
@@ -63,8 +64,8 @@ class Player(models.Model):
     def __unicode__(self):
         return self.user.username
 
-    def update_all_opponents_rating(self, other):
-        self.all_opponents_rating += other.rating
+    def update_all_opponents_rating(self, other_player):
+        self.all_opponents_rating += other_player.rating
 
     def calc_reg_rating(self):
         numerator = (self.all_opponents_rating + 400 * (self.reg_wins - self.reg_losses))
@@ -104,3 +105,6 @@ class Player(models.Model):
         self.bl_rating = self.calc_bu_rating()
         self.bu_rating = self.calc_bl_rating()
         super(Player, self).save(*args, **kwargs)
+
+
+

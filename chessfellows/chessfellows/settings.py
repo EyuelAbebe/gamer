@@ -38,7 +38,8 @@ class Common(Configuration):
         'south',
         'chess',
         'rest_framework',
-        'registration'
+        'registration',
+        'bootstrap3',
     )
 
     MIDDLEWARE_CLASSES = (
