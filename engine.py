@@ -62,10 +62,19 @@ class Piece(object):
         ll = [(self.x - x, self.y - x) for x in xrange(1, 8) if (self.x - x, self.y - x) in BOARD]
         ul = [(self.x - x, self.y + x) for x in xrange(1, 8) if (self.x - x, self.y + x) in BOARD]
         rays = [up, down, left, right, ur, lr, ll, ul]
+        # print "self.color {}".format(self.color)
         for ray in rays:
             for coord in ray:
-                if (board[coord] is None) or board[coord].color != self.color:
+                # print "coord {}".format(coord)
+                # if board[coord] is not None:
+                #     print "board[coord].color {}".format(board[coord].color)
+                # else:
+                #     print "None"
+                if (board[coord] is None):
                     not_blocked.add(coord)
+                elif board[coord].color != self.color:
+                    not_blocked.add(coord)
+                    break
                 else:
                     break
         return not_blocked

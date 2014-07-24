@@ -208,10 +208,6 @@ def test_piece_between_Queen_empty_board():
     m.view()
     not_blocked = q.not_blocked(m.board)
     test_coords = q.move_set().intersection(engine.BOARD)
-    for i in not_blocked:
-        p = engine.Pawn(i, "black")
-        m.board[i] = p
-    m.view()
     assert q.not_blocked(m.board) == test_coords
 
 
@@ -225,7 +221,7 @@ def test_blocked_Queen_blocked_all_sides_same_color():
 
 
 def test_blocked_Queen_blocked_all_sides_same_color_two_squares_out():
-    u"""Assert Queen's movement stopped by same units two squars out."""
+    u"""Assert Queen's movement stopped by same color units two squars out."""
     m = engine.Match()
     coords = [(x, y) for x in xrange(98, 103, 2) for y in xrange(50, 55, 2)]
     for coord in coords:
@@ -236,3 +232,24 @@ def test_blocked_Queen_blocked_all_sides_same_color_two_squares_out():
     expected = set([(x, y) for x in xrange(99, 102) for y in xrange(51, 54)])
     expected.remove((100, 52))
     assert q.not_blocked(m.board) == expected
+
+
+def test_blocked_Queen_blocked_all_sides_opposite_color_two_squares_out():
+        u"""Assert Queen's movement stopped by opposite color units two squars out."""
+        m = engine.Match()
+        coords = [(x, y) for x in xrange(98, 103, 2) for y in xrange(50, 55, 2)]
+        expected = set([(x, y) for x in xrange(99, 102) for y in xrange(51, 54)])
+        for coord in coords:
+            if coord == (100, 52):
+                color = "black"
+                unit = engine.Queen
+            else:
+                unit = engine.Pawn
+                color = "white"
+            q = unit(coord, color)
+            m.board[coord] = q
+            expected.add(coord)
+        q = m.board[(100, 52)]
+        m.view()
+        expected.remove((100, 52))
+        assert q.not_blocked(m.board) == expected
