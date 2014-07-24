@@ -13,6 +13,8 @@ INVALID_COORDS = [
 VALID_A1 = [chr(x) + chr(y) for x in xrange(97, 105) for y in xrange(49, 57)]
 INVALID_A1 = ['a0', 'a9', 'h0', 'h9', 'z1', 'z8']
 EMPTY_BOARD = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
+MIN_X, MAX_X = 97, 104
+MIN_Y, MAX_Y = 49, 56
 
 
 def test_coord_to_a1():
