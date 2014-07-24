@@ -253,3 +253,28 @@ def test_blocked_Queen_blocked_all_sides_opposite_color_two_squares_out():
         m.view()
         expected.remove((100, 52))
         assert q.not_blocked(m.board) == expected
+
+
+def test_king_valid_moves_checkmate():
+        u"""Assert King cannot move into check."""
+        m = engine.Match()
+        k = engine.King((97, 49), "white")
+        r1 = engine.Rook((98, 56), "black")
+        r2 = engine.Rook((104, 50), "black")
+        for unit in [k, r1, r2]:
+            m.board[(unit.x, unit.y)] = unit
+        m.view()
+        assert k.valid_moves(m.board) == set()
+
+
+def test_king_checkmate():
+        u"""Assert checkmate flags appropriately."""
+        m = engine.Match()
+        k = engine.King((97, 49), "white")
+        r1 = engine.Rook((97, 56), "black")
+        r2 = engine.Rook((104, 50), "black")
+        q = engine.Queen((98, 56), "black")
+        for unit in [k, r1, r2, q]:
+            m.board[(unit.x, unit.y)] = unit
+        m.view()
+        assert m._checkmate("white") is True

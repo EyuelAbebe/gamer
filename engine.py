@@ -245,13 +245,16 @@ class King(Piece):
         not_blocked = self.not_blocked(board)
         moves_on_board = move_set.intersection(BOARD)
         valid_moves = not_blocked.intersection(moves_on_board)
-        for move in valid_moves:
+        for move in valid_moves.copy():
             for coord in BOARD:
-                if board[coord]:
+                if board[coord] and coord != (self.x, self.y):
                     other_color = board[coord].color
-                    other_moves = board[coord].valid_moves()
-                    if other_color != self.color and coord in other_moves:
-                        valid_moves.remove(move)
+                    other_moves = board[coord].valid_moves(board)
+                    if other_color != self.color and move in other_moves:
+                        try:
+                            valid_moves.remove(move)
+                        except KeyError:
+                            pass
         return valid_moves
 
     def __repr__(self):
@@ -402,17 +405,23 @@ class Match(object):
                 if piece.color != color:
                     for move in piece.valid_moves(self.board):
                         moves.add(move)
-                if isinstance(piece, King) and (piece.color == color):
-                    king_coord = (piece.x, piece.y)
+                # if isinstance(piece, King) and (piece.color == color):
+                #     king_coord = (piece.x, piece.y)
         # If king's position is in the list of possible moves -> return True
-        if king_coord in moves:
+        king = self._find_king(color)
+        # print king.x, king.y
+        # print "moves {}".format(moves)
+        # print tuple((king.x, king.y)) in moves
+        if tuple((king.x, king.y)) in moves:
             return True
         else:
             return False
 
     def _checkmate(self, color):
         king = self._find_king(color)
-        if self._in_check(color) and king.valid_moves == []:
+        # print (king.x, king.y)
+        # print king.valid_moves(self.board)
+        if self._in_check(color) and king.valid_moves(self.board) == set():
             return True
         else:
             return False
