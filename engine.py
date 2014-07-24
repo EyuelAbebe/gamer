@@ -133,6 +133,8 @@ class Bishop(SimpleUnit):
             self.viz = -3
         else:
             self.viz = 3
+        self.moves = [(x, x) for x in xrange(1, 8)]
+        self.moves += [(-x, -x) for x in xrange(1, 8)]
 
     def __repr__(self):
         if self.color == 'black':
@@ -149,6 +151,10 @@ class Rook(SimpleUnit):
             self.viz = -4
         else:
             self.viz = 4
+        self.moves = [(x, 0) for x in xrange(1, 8)]
+        self.moves += [(-x, 0) for x in xrange(1, 8)]
+        self.moves += [(0, y) for y in xrange(1, 8)]
+        self.moves += [(0, -y) for y in xrange(1, 8)]
 
     def __repr__(self):
         if self.color == 'black':
@@ -165,6 +171,8 @@ class Queen(SimpleUnit):
             self.viz = -5
         else:
             self.viz = 5
+        self.moves = [(x, y) for x in xrange(1, 8) for y in xrange(1, 8)]
+        self.moves += [(-x, -y) for x in xrange(1, 8) for y in xrange(1, 8)]
 
     def __repr__(self):
         if self.color == 'black':
@@ -181,6 +189,7 @@ class King(SimpleUnit):
             self.viz = -6
         else:
             self.viz = 6
+        self.moves = [(x, y) for x in [-1, 0, 1] for y in [-1, 0, 1]]
 
     def __repr__(self):
         if self.color == 'black':
@@ -209,12 +218,12 @@ class Match(object):
         self.view()
 
     def _create_blank_board(self):
-        board = dict([((x, y), None) for x in xrange(97, 105) for y in xrange(49, 57)])
+        board = dict([((x, y), None) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MIN_Y, MAX_Y + 1)])
         return board
 
     def _add_simple_units(self):
-        black = [(x, y) for x in xrange(97, 105) for y in xrange(55, 57)]
-        white = [(x, y) for x in xrange(97, 105) for y in xrange(49, 51)]
+        black = [(x, y) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MAX_Y - 1, MAX_Y + 1)]
+        white = [(x, y) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MIN_Y, MIN_Y + 2)]
         for i in black:
             self.board[i] = SimpleUnit(i, 'black')
         for i in white:
@@ -224,11 +233,11 @@ class Match(object):
         black_units = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
         white_units = black_units[::-1]
         for i, unit in enumerate(black_units):
-            self.board[(97 + i, 56)] = unit((97 + i, 56), 'black')
-            self.board[(97 + i, 55)] = Pawn((97 + i, 55), 'black')
+            self.board[(MIN_X + i, MAX_Y)] = unit((MIN_X + i, MAX_Y), 'black')
+            self.board[(MIN_X + i, MAX_Y - 1)] = Pawn((MIN_X + i, MAX_Y - 1), 'black')
         for i, unit in enumerate(white_units):
-            self.board[(97 + i, 49)] = unit((97 + i, 49), 'white')
-            self.board[(97 + i, 50)] = Pawn((97 + i, 50), 'white')
+            self.board[(MIN_X + i, MIN_Y)] = unit((MIN_X + i, MIN_Y), 'white')
+            self.board[(MIN_X + i, MIN_Y + 1)] = Pawn((MIN_X + i, MIN_Y + 1), 'white')
 
     def _make_square(self):
         square = [[] for i in xrange(8)]
