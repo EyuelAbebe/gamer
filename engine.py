@@ -119,7 +119,6 @@ class SimpleUnit(Piece):
             self.moves = [(0, -1)]
             self.viz = -1
 
-
     def __repr__(self):
         if self.color == 'black':
             return 'Sb:({},{})'.format(self.x, self.y)
@@ -352,11 +351,11 @@ class Match(object):
             if self._in_check(color):
                 print "{}'s king is in check!".format(color.title())
                 piece = self._find_king()
-                possible_moves = piece.possible_moves()
+                valid_moves = piece.valid_moves()
             else:
-                piece, possible_moves = self._move_from(color)
+                piece, valid_moves = self._move_from(color)
             start_a1 = _coord_to_a1[(piece.x, piece.y)]
-            end_a1 = _coord_to_a1[self._move_to(piece, possible_moves, color)]
+            end_a1 = _coord_to_a1[self._move_to(piece, valid_moves, color)]
             self.move(start_a1, end_a1)
             white_move = not white_move
             won = self._match_won(color)
@@ -371,17 +370,17 @@ class Match(object):
             prompt = u"That's not your unit. Pick again. "
             start_coord = _a1_to_coord[raw_input(prompt)]
         piece = self.board[start_coord]
-        possible_moves = piece.possible_moves(self.board)
-        if possible_moves == []:
+        valid_moves = piece.valid_moves(self.board)
+        if valid_moves == []:
             print u"That peice does not have valid moves. Pick again. "
             return self._move_from(color)
-        return piece, possible_moves
+        return piece, valid_moves
 
-    def _move_to(self, piece, possible_moves, color):
-        a1_moves = " ".join([_coord_to_a1[x] for x in possible_moves])
+    def _move_to(self, piece, valid_moves, color):
+        a1_moves = " ".join([_coord_to_a1[x] for x in valid_moves])
         prompt = u"Move {} to {}: ".format(piece, a1_moves)
         end_coord = _a1_to_coord[raw_input(prompt)]
-        while end_coord not in possible_moves:
+        while end_coord not in valid_moves:
             prompt = [u"That's not a valid move for this unit."]
             prompt.append([u"Move {} to {}: ".format(piece, a1_moves)])
             prompt = "\n".join(prompt)
@@ -394,7 +393,7 @@ class Match(object):
         for piece in self.pieces:
             if piece is not None:
                 if piece.color != color:
-                    for move in piece.possible_moves(self.board):
+                    for move in piece.valid_moves(self.board):
                         moves.add(move)
                 if isinstance(piece, King) and (piece.color == color):
                     king_coord = (piece.x, piece.y)
@@ -406,7 +405,7 @@ class Match(object):
 
     def _checkmate(self, color):
         king = self._find_king(color)
-        if self._in_check(color) and king.possible_moves == []:
+        if self._in_check(color) and king.valid_moves == []:
             return True
         else:
             return False
@@ -481,13 +480,13 @@ class Match(object):
         u"""Return True if a piece of the player's color is at move_from."""
         piece = self.board[move_from]
         if piece:
-            if piece.color == color and piece.possible_moves(self.board):
+            if piece.color == color and piece.valid_moves(self.board):
                 return True
         return False
 
     def _validate_move_to(self, piece, move_to):
         u"""Return True if the pice can move to the move_to position."""
-        moves = piece.possible_moves(self.board)
+        moves = piece.valid_moves(self.board)
         if move_to in moves:
             return True
         return False
