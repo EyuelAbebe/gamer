@@ -20,6 +20,7 @@ _a1_to_coord = dict(
     [(chr(x) + chr(y), (x, y)) for x in xrange(MIN_X, MAX_X + 1) for y in xrange(MIN_Y, MAX_Y + 1)]
     )
 POSITIONS = [(x, y) for y in xrange(MAX_Y, MIN_Y - 1, -1) for x in xrange(MIN_X, MAX_X + 1)]
+BOARD = set(POSITIONS)
 
 # Elements of visualization
 pieces = u''.join(unichr(9812 + x) for x in range(12))
@@ -36,6 +37,7 @@ tpl = u' {0} ' + vbar
 
 def _is_coord_on_board(coord):
     u"""Return True if coordinate is on the board."""
+    return coord in BOARD
 
 
 class Piece(object):
@@ -49,10 +51,61 @@ class Piece(object):
             self.x, self.y = coord
         self.color = color
 
+
+    def not_blocked(self, board):
+        not_blocked = set()
+        up = [(self.x, y) for y in xrange(self.y + 1, MAX_Y + 1)]
+        down = [(self.x, y) for y in xrange(self.y, MIN_Y, -1)]
+        left = [(x, self.y) for x in xrange(self.x, MIN_X, -1)]
+        right = [(x, self.y) for x in xrange(self.x + 1, MAX_X)]
+        ur = [(self.x + x, self.y + x) for x in xrange(8) if (self.x + x, self.y + x) in BOARD]
+        lr = [(self.x + x, self.y - x) for x in xrange(8) if (self.x + x, self.y - x) in BOARD]
+        ll = [(self.x - x, self.y - x) for x in xrange(8) if (self.x - x, self.y - x) in BOARD]
+        ul = [(self.x - x, self.y + x) for x in xrange(8) if (self.x - x, self.y + x) in BOARD]
+        rays = [up, down, left, right, ur, lr, ll, ul]
+        for ray in rays:
+            for coord in ray:
+                if (board[coord] is None) or board[coord].color != self.color:
+                    not_blocked.add(coord)
+                else:
+                    break
+        return not_blocked
+
+        # # BROKEN
+        # new_x, new_y = coord
+        # min_x = min(new_x, self.x)
+        # min_y = min(new_y, self.y)
+        # max_x = max(new_x, self.x)
+        # max_y = max(new_y, self.y)
+        # ray = [(x, y) for x in xrange(min_x, max_x + 1) for y in (min_y, max_y + 1)]
+        # for pos in ray:
+        #     if _is_coord_on_board(pos) and pos != (self.x, self.y):
+        #         if board[pos] is not None:
+        #             print board[pos]
+        #             if board[pos].color == self.color:
+        #                 return True
+        # return False
+
     def move(self, coord, board):
+        if coord in self.valid_moves(board):
             board[coord], board[(self.x, self.y)] = self, None
             self.x, self.y = coord
         return board
+
+    def move_set(self):
+        u"""Return a set of coords representing moves from current coord."""
+        move_set = set()
+        for move in self.moves:
+            dx, dy = move
+            move_set.add((self.x + dx, self.y + dy))
+        return move_set
+
+    def valid_moves(self, board):
+        move_set = self.move_set()
+        not_blocked = self.not_blocked(board)
+        moves_on_board = move_set.intersection(BOARD)
+        valid_moves = not_blocked.intersection(moves_on_board)
+        return valid_moves
 
 
 class SimpleUnit(Piece):
@@ -66,15 +119,6 @@ class SimpleUnit(Piece):
             self.moves = [(0, -1)]
             self.viz = -1
 
-    def possible_moves(self, board):
-        valid_moves = []
-        for move in self.moves:
-            dx, dy = move
-            new_coord = (self.x + dx, self.y + dy)
-            if _is_coord_on_board(new_coord):
-                if not board[new_coord] or (board[new_coord].color != self.color):
-                    valid_moves.append(new_coord)
-        return valid_moves
 
     def __repr__(self):
         if self.color == 'black':
@@ -111,6 +155,23 @@ class Knight(Piece):
             (2, 1), (2, -1), (-2, 1), (-2, -1),
             (1, 2), (1, -2), (-1, 2), (-1, -2)
         ]
+
+    def blocked(self, board):
+        not_blocked = set()
+        up = [(self.x, y) for y in xrange(self.y + 1, MAX_Y + 1)]
+        down = [(self.x, y) for y in xrange(self.y, MIN_Y, -1)]
+        left = [(x, self.y) for x in xrange(self.x, MIN_X, -1)]
+        right = [(x, self.y) for x in xrange(self.x + 1, MAX_X)]
+        ur = [(self.x + x, self.y + x) for x in xrange(8) if (self.x + x, self.y + x) in BOARD]
+        lr = [(self.x + x, self.y - x) for x in xrange(8) if (self.x + x, self.y - x) in BOARD]
+        ll = [(self.x - x, self.y - x) for x in xrange(8) if (self.x - x, self.y - x) in BOARD]
+        ul = [(self.x - x, self.y + x) for x in xrange(8) if (self.x - x, self.y + x) in BOARD]
+        rays = [up, down, left, right, ur, lr, ll, ul]
+        for ray in rays:
+            for coord in ray:
+                if (board[coord] is None) or board[coord].color != self.color:
+                    not_blocked.add(coord)
+        return not_blocked
 
     def __repr__(self):
         if self.color == 'black':
