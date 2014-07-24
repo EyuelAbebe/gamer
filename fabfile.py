@@ -6,7 +6,7 @@ import time
 
 env.hosts = ['localhost', ]
 env.aws_region = 'us-west-2'
-
+env.key_filename = '/home/caderache2014/.ssh/BilinghamKepPair1.pem'
 sync_exclude_list = [
     '.git',
     '*.pyc',
@@ -49,9 +49,9 @@ def provision_instance(wait_for_running=False, timeout=60, interval=2):
     timeout_val = int(timeout)
     conn = get_ec2_connection()
     instance_type = 't1.micro'
-    key_name = 'pk-aws'
+    key_name = 'BilinghamKepPair1'
     security_group = 'ssh-access'
-    image_id = 'ami-d0d8b8e0'
+    image_id = 'ami-4bbcc47b'
 
     reservations = conn.run_instances(
         image_id,
