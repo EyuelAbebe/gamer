@@ -14,10 +14,9 @@ var onDrop = function(source, target, piece, newPos, oldPos, orientation) {
       oldPosString = '';
   moves = source + '-' + target;
   oldPosString = ChessBoard.objToFen(oldPos);
-  console.log("Source: " + source);
-  console.log("Target: " + target);
   console.log("Moves: " + moves);
   console.log("Old position: " + oldPosString);
+  console.log("Draggable: " + (board.draggable));
   $.ajax("/game/move/", {
     type: 'POST',
     data: {move: moves, position: oldPosString},
