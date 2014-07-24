@@ -65,10 +65,10 @@ class Common(Configuration):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'gamerdb',
+            'NAME': 'gamer',
             'USER': 'codefellow',
             'PASSWORD': 'codefellow',
-            'HOST': 'gamer.ccjdipvshbwe.us-west-2.rds.amazonaws.com',
+            'HOST': 'chessfellows.ccjdipvshbwe.us-west-2.rds.amazonaws.com',
             'PORT': '5432'
         }
     }

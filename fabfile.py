@@ -148,7 +148,7 @@ def deploy():
         print "\nYOU ARE SKIPPING SOFTWARE UPDATES AND INSTALLS"
     mk_static_and_media_dirs()
     give_ubuntu_user_static_media_own()
-    run_collect_static()
+    #run_collect_static()
     move_nginx_config()
     restart_nginx()
     move_supervisor_config()
