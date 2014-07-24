@@ -27,6 +27,9 @@ class Match(models.Model):
         return self.game_type
 
 
+    class Meta:
+        verbose_name_plural="Matches"
+
 class Player(models.Model):
     user = models.OneToOneField(User)
     age = models.PositiveIntegerField(max_length=4, default=0)
