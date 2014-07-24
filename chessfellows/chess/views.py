@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 from board import Board
+from engine import Match as table
 
 def signUp(request):
     if request.method == 'POST':
@@ -41,9 +42,14 @@ def start_table(request):
 @csrf_exempt
 def make_move(request):
     # print str(request.POST['position'])
-    old_board = Board(request.POST['position'])
-    old_board.set_board(str(request.POST['move']))
-    new_move = old_board.board
+    m = table()
+    new_move, won = m._play_web(
+        request.POST['position'],
+        str(request.POST['move']),
+        True)
+    # old_board = Board(request.POST['position'])
+    # old_board.set_board(str(request.POST['move']))
+    # new_move = old_board.board
     response = {'moves': new_move}
     return HttpResponse(json.dumps(response), mimetype="application/json")
 

@@ -111,11 +111,13 @@ class Player(models.Model):
 
 
 class Boards(models.Model):
-    white = models.ForeignKey(User)
-    black = models.ForeignKey(User)
+    white = models.ForeignKey(User, related_name="Wht")
+    black = models.ForeignKey(User, related_name="Blck")
     state = models.CharField(max_length=100)
-    id = models.CharField(primary_key=True, unique=True, default="")
+    id = models.CharField(max_length=100, primary_key=True, unique=True, default="")
+    turn = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        id = float(self.white)
+        if self.id == "":
+            self.id = str(self.white) + "-" + str(self.black)
         super(Boards, self)._save(*args, **kwargs)
