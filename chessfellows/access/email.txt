@@ -1,4 +1,0 @@
-smtp.gmail.com
-587
-chessfellows@gmail.com
-chessfellows_project
