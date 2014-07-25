@@ -94,6 +94,14 @@ $('#signup').on('submit', function(event){
 
 
 
+var request_game =  function(item){
+    alert(item.tagName);
+
+}
+
+$('.player').on('click', request_game);
+
+
 var data = {
     labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     datasets: [
