@@ -1,15 +1,12 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
 from .models import Player, Match
-from django.contrib.auth.models import User
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
-import django.dispatch
 from django.views.decorators.csrf import csrf_exempt
 import json
-from board import Board
 import engine
 
 def Login(request):
@@ -38,12 +35,12 @@ def signUp(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/accounts/register_success/')
+            return HttpResponseRedirect('/register_success/')
     args = {}
     args.update(csrf(request))
     args['form'] = SignUpForm()
     print args
-    return render(request, 'register.html', args)
+    return render(request, 'registration/registration_form.html', args)
 
 
 def landing(request):
@@ -75,7 +72,6 @@ def make_move(request):
     pos = pos.replace('6', '111111')
     pos = pos.replace('7', '1111111')
     pos = pos.replace('8', '11111111')
-    # import pdb; pdb.set_trace()
     new_move, won = m._play_web(
         pos,
         str(request.POST['move']),
@@ -111,7 +107,6 @@ def update_user(request):
 
 def update_player(request):
     player = get_object_or_404(Player, user=request.user)
-    import pdb; pdb.set_trace()
     if request.method == "POST":
         form = PlayerForm(request.POST, request.FILES, instance=player)
 
@@ -120,7 +115,7 @@ def update_player(request):
     else:
         form = UserForm(instance=request.user)
 
-    return HttpResponseRedirect('/accounts/home/')
+    return HttpResponseRedirect(reverse('home'))
 
 
 def profile_page(request):
