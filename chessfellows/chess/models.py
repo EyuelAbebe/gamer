@@ -1,12 +1,11 @@
 import os
 from django.db import models
 from django.contrib.auth.models import User
-from chessfellows import settings
+# from chessfellows import settings
 import datetime
-from django.db.models.signals import post_init, post_save
+from django.db.models.signals import post_save  # , post_init
 
 game_type_choices = ((0, 'Regular'), (1, 'Bullet'), (2, 'Bullet'))
-
 
 
 def create_profile(sender, **kwargs):
@@ -20,6 +19,7 @@ def create_profile(sender, **kwargs):
 
 post_save.connect(create_profile, sender=User)
 
+
 def get_file_owner_username(instance, filename):
     parts = [instance.user.username]
     parts.append(os.path.basename(filename))
@@ -29,12 +29,15 @@ def get_file_owner_username(instance, filename):
 
 class Match(models.Model):
     white = models.ForeignKey(User, related_name="White")
-    black = models.ForeignKey(User, related_name="Black", blank=True)
+    black = models.ForeignKey(
+        User, related_name="Black", blank=True, null=True
+        )
     moves = models.TextField(blank=True)
     date_played = models.DateTimeField(auto_now=True, blank=True)
     winner = models.CharField(max_length=10, blank=True)
     game_type = models.IntegerField(choices=game_type_choices, default=0)
     current_move = models.CharField(max_length=5, blank=True)
+    current_state = models.CharField(max_length=72, blank=True)
     white_turn = models.BooleanField(default=True)
 
     def __unicode__(self):
@@ -48,7 +51,9 @@ class Player(models.Model):
     user = models.OneToOneField(User)
     age = models.PositiveIntegerField(max_length=4, default=0)
     country = models.CharField(max_length=10, default='USA')
-    date_joined = models.DateTimeField(auto_now=True, blank=True, default=datetime.date.today)
+    date_joined = models.DateTimeField(
+        auto_now=True, blank=True, default=datetime.date.today
+        )
     reg_rating = models.DecimalField(
         default=1200.00,
         max_digits=6,
@@ -85,7 +90,9 @@ class Player(models.Model):
         self.all_opponents_rating += other_player.rating
 
     def calc_reg_rating(self):
-        numerator = (self.all_opponents_rating + 400 * (self.reg_wins - self.reg_losses))
+        numerator = (
+            self.all_opponents_rating + 400 * (self.reg_wins - self.reg_losses)
+            )
         denom = self.reg_wins + self.reg_losses + self.reg_draws
 
         if denom == 0:
@@ -96,7 +103,9 @@ class Player(models.Model):
         return numerator / denom
 
     def calc_bl_rating(self):
-        numerator = (self.all_opponents_rating + 400 * (self.bl_wins - self.bl_losses))
+        numerator = (
+            self.all_opponents_rating + 400 * (self.bl_wins - self.bl_losses)
+            )
         denom = self.bl_wins + self.bl_losses + self.bl_draws
 
         if denom == 0:
@@ -107,7 +116,9 @@ class Player(models.Model):
         return numerator / denom
 
     def calc_bu_rating(self):
-        numerator = (self.all_opponents_rating + 400 * (self.bu_wins - self.bu_losses))
+        numerator = (
+            self.all_opponents_rating + 400 * (self.bu_wins - self.bu_losses)
+            )
         denom = self.bu_wins + self.bu_losses + self.bu_draws
 
         if denom == 0:
@@ -122,16 +133,3 @@ class Player(models.Model):
         self.bl_rating = self.calc_bu_rating()
         self.bu_rating = self.calc_bl_rating()
         super(Player, self).save(*args, **kwargs)
-
-
-# class Boards(models.Model):
-#     white = models.ForeignKey(User, related_name="Wht")
-#     black = models.ForeignKey(User, related_name="Blck")
-#     state = models.CharField(max_length=100)
-#     id = models.CharField(max_length=100, primary_key=True, unique=True, default="")
-#     turn = models.BooleanField(default=True)
-
-#     def save(self, *args, **kwargs):
-#         if self.id == "":
-#             self.id = str(self.white) + "-" + str(self.black)
-#         super(Boards, self)._save(*args, **kwargs)
