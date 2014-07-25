@@ -36,14 +36,14 @@ class User_FormControl(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(User_FormControl, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'input-mini'
 
 
 class Profile_FormControl(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Profile_FormControl, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'input-mini'
+            field.widget.attrs['class'] = 'form-control'
 
 
 class UserForm(User_FormControl):

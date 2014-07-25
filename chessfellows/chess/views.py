@@ -9,10 +9,13 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import engine
 
+loged_in_players= []
+
 def Login(request):
 
     if request.user.is_authenticated():
-       return HttpResponseRedirect(reverse('profile'))
+        loged_in_players.append(request.user)
+        return HttpResponseRedirect(reverse('profile'))
 
     if request.method == 'POST':
 
@@ -44,6 +47,10 @@ def signUp(request):
 
 
 def landing(request):
+
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('home'))
+
     sign_up_form = SignUpForm()
     return render(request, 'chess/landing.html', locals(), context_instance=RequestContext(request))
 
@@ -89,7 +96,9 @@ def get_player_from_match(player_id):
 
 
 def history_page(request):
+    all_players = loged_in_players
     return render_to_response('user_profile/history_page.html',
+                              locals(),
                               context_instance=RequestContext(request))
 
 
