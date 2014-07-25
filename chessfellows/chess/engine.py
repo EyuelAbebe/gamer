@@ -169,10 +169,8 @@ class Knight(Piece):
     #     return BOARD
     def valid_moves(self, board):
         move_set = self.move_set()
-        print move_set
         # valid_moves = move_set.intersection(BOARD)
         valid_moves = BOARD.intersection(move_set)
-        print valid_moves
         return valid_moves
 
     def __repr__(self):
@@ -500,12 +498,12 @@ class Match(object):
             color = "black"
         self.board = self._str_to_board(board_str)
         move_from, move_to = _a1_to_coord[move[0:2]], _a1_to_coord[move[3:]]
-        print "Move from: {}".format(move_from)
-        print "Move to: {}".format(move_to)
+        # print "Move from: {}".format(move_from)
+        # print "Move to: {}".format(move_to)
         if self._validate_move_from(move_from, color):
             print "Move_from validated"
             piece = self.board[move_from]
-            print piece
+            # print piece
             if self._validate_move_to(piece, move_to):
                 print "Move to validated. Now moving."
                 self.board = piece.move(move_to, self.board)
@@ -524,7 +522,7 @@ class Match(object):
     def _validate_move_to(self, piece, move_to):
         u"""Return True if the pice can move to the move_to position."""
         moves = piece.valid_moves(self.board)
-        print "Moves: {}".format(moves)
+        # print "Moves: {}".format(moves)
         if move_to in moves:
             return True
         return False
