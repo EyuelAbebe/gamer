@@ -1,6 +1,5 @@
 from configurations import Configuration
 
-
 class Common(Configuration):
     u"""
     Django settings for chessfellows project.
@@ -109,3 +108,9 @@ class Common(Configuration):
 class Dev(Common):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'gamer',
+        }
+    }

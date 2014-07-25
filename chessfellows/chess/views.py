@@ -6,6 +6,7 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 import json
 import engine
 
@@ -59,14 +60,14 @@ def landing(request):
 def home_page(request):
     all_players = Player.objects.all()
     beginner, intermediate, advanced = [], [], []
-
-    # import pdb; pdb.set_trace()
+    live_games = []
     logged_in_players = Logedin.objects.all()
+    all_matches = Match.objects.filter(in_progress__exact=1)
     for user_ in logged_in_players:
-        p = Player.object.get(user=user_)
-        if p.rating <= 1200:
+        p = Player.objects.get(user=user_)
+        if p.reg_rating <= 1200:
             beginner.append(p)
-        elif 1201 < p.rating < 1750:
+        elif 1201 < p.reg_rating < 1750:
             intermediate.append(p)
         else:
             advanced.append(p)
@@ -109,7 +110,9 @@ def get_player_from_match(player_id):
 
 
 def history_page(request):
+    # my_matches = Match.objects.get(white.username=request.user.username) + Match.object.filter(black.username=request.user.username)
     return render_to_response('user_profile/history_page.html',
+                              locals(),
                               context_instance=RequestContext(request))
 
 

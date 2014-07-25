@@ -32,10 +32,11 @@ def get_file_owner_username(instance, filename):
 class Match(models.Model):
     white = models.ForeignKey(User, related_name="White")
     black = models.ForeignKey(User, related_name="Black")
-    moves = models.TextField()
+    moves = models.TextField(blank=True)
     date_played = models.DateTimeField(auto_now=True, blank=True)
-    winner = models.CharField(max_length=10, default='white')
+    winner = models.CharField(max_length=10, default='white', blank=True)
     game_type = models.IntegerField(choices=game_type_choices)
+    in_progress = models.PositiveIntegerField(default=0)
 
     def __unicode__(self):
         return self.game_type
@@ -74,6 +75,7 @@ class Player(models.Model):
     bu_losses = models.PositiveIntegerField(default=0)
     bu_draws = models.PositiveIntegerField(default=0)
     matches = models.ManyToManyField(Match, related_name="Player", blank=True)
+    in_match = models.PositiveIntegerField(default=0)
     all_opponents_rating = models.PositiveIntegerField(default=0)
     photo = models.ImageField(upload_to=get_file_owner_username,
                               blank=True)
