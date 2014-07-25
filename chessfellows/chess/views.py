@@ -83,8 +83,9 @@ def home_page(request):
 
 
 def start_table(request):
-    # black = User.objects.get(pk=3)
-    m = Match(white=request.user)
+    black = User.objects.get(pk=3)
+    str_ = "rnbqkbnr/pppppppp/11111111/11111111/11111111/11111111/PPPPPPPP/RNBQKBNR"
+    m = Match(white=request.user, black=black, current_state=str_)
     m.save()
     return render_to_response(
         'user_profile/start_table.html', context_instance={}
@@ -92,7 +93,7 @@ def start_table(request):
 
 
 @csrf_exempt
-def make_move(request, match_id):
+def make_move(request):
     u"""Return state of a match after a move.
 
     Accept:
@@ -105,7 +106,7 @@ def make_move(request, match_id):
     # Convert position from format sent by the front end to format
     # expected by the engine.
     # import pdb; pdb.set_trace()
-    print match_id
+    # print request
     pos = request.POST['position']
     pos = pos.replace('2', '11')
     pos = pos.replace('3', '111')
@@ -119,27 +120,30 @@ def make_move(request, match_id):
     # Get match by id
     # if not match_id:
     #     m = Match(white=request.user)
-    # match_id = 1
+    match_id = 20
     # Get turn from match (Boolean value representing white's move)
     match = Match.objects.get(pk=match_id)
     white_player = match.white
     black_player = match.black
-    # print "Requester: {}".format(requester)
-    # print "White player: {}\nBlack player: {}".format(
-    # white_player, black_player
-    # )
+    print "Requester: {}".format(requester)
+    print "White player: {}\nBlack player: {}".format(
+    white_player, black_player
+    )
     white_turn = match.white_turn
     new_pos = None
     current_pos = match.current_state
+    print "pos: {}".format(pos)
     # if black_player is None:
     #     match.black, black_player = requester, requester
     #     match.save()
     if (white_turn and requester == white_player) or \
        (not white_turn and requester == black_player):
         # Instantiate a Match to verify move validity
+        print "in if"
         if pos != current_pos:
             new_pos = current_pos
         else:
+            print "Board states are equal"
             m = engine.Match()
             new_pos, won = m._play_web(
                 pos,
@@ -153,13 +157,13 @@ def make_move(request, match_id):
                 match.white_turn = not white_turn
                 match.current_state = new_pos
                 match.save()
-                # print "saved!"
+                print "saved!"
     elif requester == white_player or requester == black_player:
         new_pos = match.current_state
-        # print match.current_state
-        # print "elif"
+        print match.current_state
+        print "elif"
     response = {'moves': new_pos}
-    # print new_pos
+    print new_pos
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
