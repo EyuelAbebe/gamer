@@ -1,5 +1,8 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
+from django.shortcuts import (
+    render_to_response, get_object_or_404, render,
+    HttpResponseRedirect, HttpResponse
+    )
 from .models import Player, Match
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
@@ -10,7 +13,8 @@ import json
 import engine
 from django.contrib.auth.models import User
 
-loged_in_players= []
+loged_in_players = []
+
 
 def Login(request):
 
@@ -29,9 +33,7 @@ def Login(request):
 
             return HttpResponseRedirect(reverse('home'))
 
-
     return HttpResponseRedirect(reverse('auth_login'))
-
 
 
 def signUp(request):
@@ -51,42 +53,29 @@ def landing(request):
 
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('home'))
-
     sign_up_form = SignUpForm()
-    return render(request, 'chess/landing.html', locals(), context_instance=RequestContext(request))
+    return render(
+        request, 'chess/landing.html', locals(),
+        context_instance=RequestContext(request)
+        )
 
 
 def home_page(request):
     all_players = Player.objects.all()
-    return render_to_response('user_profile/home_page.html',
-                              locals(),
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        'user_profile/home_page.html', locals(),
+        context_instance=RequestContext(request)
+        )
 
 
 def start_table(request):
-    black = User.objects.get(pk=6)
+    black = User.objects.get(pk=3)
     m = Match(white=request.user, black=black)
     m.save()
-    return render_to_response('user_profile/start_table.html',
-                              context_instance={})
+    return render_to_response(
+        'user_profile/start_table.html', context_instance={}
+        )
 
-# @csrf_exempt
-# def make_move(request):
-#     m = engine.Match()
-#     pos = request.POST['position']
-#     pos = pos.replace('2', '11')
-#     pos = pos.replace('3', '111')
-#     pos = pos.replace('4', '1111')
-#     pos = pos.replace('5', '11111')
-#     pos = pos.replace('6', '111111')
-#     pos = pos.replace('7', '1111111')
-#     pos = pos.replace('8', '11111111')
-#     new_move, won = m._play_web(
-#         pos,
-#         str(request.POST['move']),
-#         True)
-#     response = {'moves': new_move}
-#     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 @csrf_exempt
 def make_move(request):
@@ -102,7 +91,6 @@ def make_move(request):
     # Convert position from format sent by the front end to format
     # expected by the engine.
     # import pdb; pdb.set_trace()
-    print request.user
     pos = request.POST['position']
     pos = pos.replace('2', '11')
     pos = pos.replace('3', '111')
@@ -114,75 +102,56 @@ def make_move(request):
     move = str(request.POST['move'])
     requester = request.user
     # Get match by id
-    match_id = 7
+    match_id = 1
     # Get turn from match (Boolean value representing white's move)
     match = Match.objects.get(pk=match_id)
     white_player = match.white
     black_player = match.black
+    # print "Requester: {}".format(requester)
+    # print "White player: {}\nBlack player: {}".format(
+    # white_player, black_player
+    # )
     white_turn = match.white_turn
     new_pos = None
-    if black_player is None:
-        match.black, black_player = requester, requester
-        match.save()
+    current_pos = match.current_state
+    # if black_player is None:
+    #     match.black, black_player = requester, requester
+    #     match.save()
     if (white_turn and requester == white_player) or \
        (not white_turn and requester == black_player):
         # Instantiate a Match to verify move validity
-        m = engine.Match()
-
-        new_pos, won = m._play_web(
-            pos,
-            move,
-            white_turn)
-        if new_pos != pos:
-            move_history = match.moves
-            move_history += ";" + move
-            match.moves = move_history
-            match.current_move = move
-            match.white_turn = not white_turn
-            match.save()
-            print "saved!"
-    elif requester == white_player or requester == black_player:
-        # Need to either store the full current state of the board in
-        # the DB or we have to reassemble the entire game one step at a
-        # time.
-        print "elif"
-        m = engine.Match()
-        m._add_starting_units()
-        pos = m._board_to_str()
-        new_pos = None
-        moves = match.moves
-        move_list = moves.split(";")
-        print move_list
-        white_turn = True
-        # import pdb; pdb.set_trace()
-        for move in move_list[1:]:
-            print "Starting for loop"
-            print move
-            if new_pos is not None:
-                pos = new_pos
-                print pos
+        if pos != current_pos:
+            new_pos = current_pos
+        else:
+            m = engine.Match()
             new_pos, won = m._play_web(
                 pos,
                 move,
                 white_turn)
-            print new_pos
-            white_turn = not white_turn
-    if new_pos is None:
-        new_pos = pos
+            if new_pos != pos:
+                move_history = match.moves
+                move_history += move + ";"
+                match.moves = move_history
+                match.current_move = move
+                match.white_turn = not white_turn
+                match.current_state = new_pos
+                match.save()
+                # print "saved!"
+    elif requester == white_player or requester == black_player:
+        new_pos = match.current_state
+        # print match.current_state
+        # print "elif"
     response = {'moves': new_pos}
+    # print new_pos
     return HttpResponse(json.dumps(response), mimetype="application/json")
-
-
-def get_player_from_match(player_id):
-
-    pass
 
 
 def history_page(request):
     all_players = loged_in_players
-    return render_to_response('user_profile/history_page.html',
-                              locals(),
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        'user_profile/history_page.html', locals(),
+        context_instance=RequestContext(request)
+        )
 
 
 def update_user(request):
@@ -201,19 +170,15 @@ def update_player(request):
     player = get_object_or_404(Player, user=request.user)
     if request.method == "POST":
         form = PlayerForm(request.POST, request.FILES, instance=player)
-
         if form.is_valid():
             form.save()
     else:
         form = UserForm(instance=request.user)
-
     return HttpResponseRedirect(reverse('home'))
 
 
 def profile_page(request):
     """Returns profile page for a logged in user."""
-
-
     user_ = request.user
     player = get_object_or_404(Player, user=user_)
     user_form = UserForm(instance=user_)
@@ -221,25 +186,25 @@ def profile_page(request):
     player_info = {'age': player.age,
                    'country': player.country,
                    'photo': player.photo,
-                   'date' : player.date_joined}
+                   'date': player.date_joined}
     regular = {'rating': player.reg_rating,
                'wins': player.reg_wins,
                'losses': player.reg_losses,
                'draws': player.reg_draws,
                'total': player.reg_wins + player.reg_losses + player.reg_draws
-    }
+               }
     blitz = {'rating': player.bl_rating,
              'wins': player.bl_wins,
              'losses': player.bl_losses,
              'draws': player.bl_losses,
              'total': player.bl_wins + player.bl_losses + player.bl_draws
-    }
+             }
     bullet = {'rating': player.bu_rating,
               'wins': player.bu_wins,
               'losses': player.bu_losses,
               'draws': player.bu_losses,
               'total': player.bu_wins + player.bu_losses + player.bu_draws
-    }
+              }
     context = RequestContext(request, {'regular': regular,
                                        'blitz': blitz,
                                        'bullet': bullet,
