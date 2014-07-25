@@ -11,12 +11,14 @@ var longPoll = function() {
     return $.ajax({
         type: "GET",
         url: "/read_match/",
-        data: {'match_id': match_id},
+        data: {'match_id': match_id, 'position':progress_board.position},
         async: true,
         cache: false,
         timeout: 10000,
         success: function(data) {
-          progress_board.position(data.moves);
+            if (data.move !== progress_board.position){
+                progress_board.position(data.moves);
+            }
           return longPoll();
         },
         dataType: 'json'
