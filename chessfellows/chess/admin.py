@@ -3,6 +3,7 @@ from chess.models import Match, Player
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
+
 class MatchAdmin(admin.ModelAdmin):
 
     list_display = ('white',
@@ -11,7 +12,8 @@ class MatchAdmin(admin.ModelAdmin):
                     'winner',
                     'moves',
                     "white_turn",
-                    "pk",)
+                    "pk",
+                    "current_state",)
 
     list_filter = ('date_played',)
 
@@ -39,6 +41,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
 class PlayerInLine(admin.StackedInline):
     model = Player
+
 
 class UserAdmin(UserAdmin):
     inlines = (PlayerInLine, )
