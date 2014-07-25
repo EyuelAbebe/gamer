@@ -83,8 +83,8 @@ def home_page(request):
 
 
 def start_table(request):
-    black = User.objects.get(pk=3)
-    m = Match(white=request.user, black=black)
+    # black = User.objects.get(pk=3)
+    m = Match(white=request.user)
     m.save()
     return render_to_response(
         'user_profile/start_table.html', context_instance={}
@@ -92,7 +92,7 @@ def start_table(request):
 
 
 @csrf_exempt
-def make_move(request):
+def make_move(request, match_id):
     u"""Return state of a match after a move.
 
     Accept:
@@ -105,6 +105,7 @@ def make_move(request):
     # Convert position from format sent by the front end to format
     # expected by the engine.
     # import pdb; pdb.set_trace()
+    print match_id
     pos = request.POST['position']
     pos = pos.replace('2', '11')
     pos = pos.replace('3', '111')
@@ -116,7 +117,9 @@ def make_move(request):
     move = str(request.POST['move'])
     requester = request.user
     # Get match by id
-    match_id = 1
+    # if not match_id:
+    #     m = Match(white=request.user)
+    # match_id = 1
     # Get turn from match (Boolean value representing white's move)
     match = Match.objects.get(pk=match_id)
     white_player = match.white
