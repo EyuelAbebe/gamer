@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import time
 import engine
 from django.contrib.auth.models import User
 # from django.db.models import Q
@@ -173,12 +174,13 @@ def make_move(request, match_id):
 
 @csrf_exempt
 def join_table_moves(request):
+    # import pdb; pdb.set_trace()
     match_id = request.GET['match_id']
     match_table = Match.objects.get(pk=int(match_id))
 
     move = match_table.moves
     response = {'moves': move}
-
+    time.sleep(1)
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 

@@ -112,9 +112,28 @@ var data = {
     ]
 };
 
-var ctx = $("#myChart").get(0).getContext("2d");
-var myLineChart = new Chart(ctx).Line(data);
+//var ctx = $("#myChart").get(0).getContext("2d");
 
+//var myLineChart = new Chart(ctx).Line(data);
+
+
+var set_myLineChart =  function(){
+    var ctx, chart ,LineChart;
+    chart = $("#myChart");
+    if (chart.length > 0){
+        ctx = chart.get(0).getContext("2d");
+        LineChart =  new Chart(ctx).Line(data);
+    }
+    if (LineChart !== undefined){
+        return LineChart;
+
+    }
+    else{
+        return null;
+    }
+
+}
+  var myLineChart = set_myLineChart();
 
 $(document).ready(function () {
 $('form input').tooltip({

@@ -12,13 +12,15 @@ class Migration(SchemaMigration):
         db.create_table(u'chess_match', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('white', self.gf('django.db.models.fields.related.ForeignKey')(related_name='White', to=orm['auth.User'])),
-            ('black', self.gf('django.db.models.fields.related.ForeignKey')(related_name='Black', to=orm['auth.User'])),
-            ('moves', self.gf('django.db.models.fields.TextField')()),
+            ('black', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='Black', null=True, to=orm['auth.User'])),
+            ('moves', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('date_played', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('winner', self.gf('django.db.models.fields.CharField')(default='white', max_length=10)),
-            ('game_type', self.gf('django.db.models.fields.IntegerField')()),
-            ('current_move', self.gf('django.db.models.fields.CharField')(max_length=5)),
+            ('winner', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
+            ('game_type', self.gf('django.db.models.fields.IntegerField')(default=0)),
+            ('current_move', self.gf('django.db.models.fields.CharField')(max_length=5, blank=True)),
+            ('current_state', self.gf('django.db.models.fields.CharField')(max_length=72, blank=True)),
             ('white_turn', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('in_progress', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
         ))
         db.send_create_signal(u'chess', ['Match'])
 
@@ -41,6 +43,7 @@ class Migration(SchemaMigration):
             ('bu_wins', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
             ('bu_losses', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
             ('bu_draws', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('in_match', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
             ('all_opponents_rating', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
             ('photo', self.gf('django.db.models.fields.files.ImageField')(max_length=100, blank=True)),
         ))
@@ -55,6 +58,13 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['player_id', 'match_id'])
 
+        # Adding model 'Logedin'
+        db.create_table(u'chess_logedin', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('player', self.gf('django.db.models.fields.related.OneToOneField')(related_name='a_player', unique=True, blank=True, to=orm['chess.Player'])),
+        ))
+        db.send_create_signal(u'chess', ['Logedin'])
+
 
     def backwards(self, orm):
         # Deleting model 'Match'
@@ -65,6 +75,9 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field matches on 'Player'
         db.delete_table(db.shorten_name(u'chess_player_matches'))
+
+        # Deleting model 'Logedin'
+        db.delete_table(u'chess_logedin')
 
 
     models = {
@@ -97,17 +110,24 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
+        u'chess.logedin': {
+            'Meta': {'object_name': 'Logedin'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'player': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'a_player'", 'unique': 'True', 'blank': 'True', 'to': u"orm['chess.Player']"})
+        },
         u'chess.match': {
             'Meta': {'object_name': 'Match'},
-            'black': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'Black'", 'to': u"orm['auth.User']"}),
-            'current_move': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
+            'black': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'Black'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'current_move': ('django.db.models.fields.CharField', [], {'max_length': '5', 'blank': 'True'}),
+            'current_state': ('django.db.models.fields.CharField', [], {'max_length': '72', 'blank': 'True'}),
             'date_played': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'game_type': ('django.db.models.fields.IntegerField', [], {}),
+            'game_type': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'moves': ('django.db.models.fields.TextField', [], {}),
+            'in_progress': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            'moves': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'white': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'White'", 'to': u"orm['auth.User']"}),
             'white_turn': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'winner': ('django.db.models.fields.CharField', [], {'default': "'white'", 'max_length': '10'})
+            'winner': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'})
         },
         u'chess.player': {
             'Meta': {'object_name': 'Player'},
@@ -124,6 +144,7 @@ class Migration(SchemaMigration):
             'country': ('django.db.models.fields.CharField', [], {'default': "'USA'", 'max_length': '10'}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.date.today', 'auto_now': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'in_match': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'matches': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'Player'", 'blank': 'True', 'to': u"orm['chess.Match']"}),
             'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'blank': 'True'}),
             'reg_draws': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
