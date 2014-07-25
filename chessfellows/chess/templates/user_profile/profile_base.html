@@ -77,7 +77,7 @@
               <li onclick="highlight(this)"><a href="{% url 'profile' %}"><i class="fa fa-user"></i> Profile</a></li>
               <li onclick="highlight(this)"><a href="{% url 'history' %}"><i class="fa fa-history"></i> History</a></li>
               <li onclick="highlight(this)"><a href="{% url 'start_table' %}"><i class="fa fa-square"></i> Start Table</a></li>
-              <li onclick="highlight(this)"><a href="/"><i class="fa fa-share-square"></i> Join Table</a></li>
+              <li onclick="highlight(this)" style="display:None"><a href="/"><i class="fa fa-share-square"></i> Join Table</a></li>
               <li onclick="highlight(this)"><a href="{% url 'auth_logout' %}"><i class="fa fa-sign-out"></i> Logout</a></li>
             </ul>
         </div>
@@ -120,6 +120,7 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../../static/js/grayscale.js"></script>
+    <script src="../../static/js/user_profile.js" type="text/javascript"></script>
     <script src="../../static/js/user_profile.js" type="text/javascript"></script>
 
 </body>

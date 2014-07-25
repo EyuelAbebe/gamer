@@ -79,7 +79,15 @@ def home_page(request):
 def start_table(request):
 
     return render_to_response('user_profile/start_table.html',
-                              context_instance={})
+                              context_instance=RequestContext(request))
+
+def join_table(request, match_id):
+
+    match_table = Match.objects.get(pk=match_id)
+    current_moves = match_table.moves
+    return render_to_response('user_profile/join_table.html',
+                              locals(),
+                              context_instance=RequestContext(request))
 
 @csrf_exempt
 def make_move(request):
@@ -102,6 +110,19 @@ def make_move(request):
     # new_move = old_board.board
     response = {'moves': new_move}
     return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+
+@csrf_exempt
+def join_table_moves(request):
+    match_id = request.GET['match_id']
+    match_table = Match.objects.get(pk=int(match_id))
+
+    move = match_table.moves
+    response = {'moves': move}
+
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
 
 
 def get_player_from_match(player_id):

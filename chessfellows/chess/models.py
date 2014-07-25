@@ -39,7 +39,7 @@ class Match(models.Model):
     in_progress = models.PositiveIntegerField(default=0)
 
     def __unicode__(self):
-        return self.game_type
+        return unicode(self.game_type)
 
 
     class Meta:

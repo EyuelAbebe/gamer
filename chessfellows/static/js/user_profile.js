@@ -42,6 +42,24 @@ $('#save_personal_info').on('submit', function(event){
 })
 
 
+
+$('.gamer').on('click', function(event){
+     event.preventDefault();
+    var personal_form = $(event.target);
+    var formData = personal_form.serialize()
+
+    $.ajax(("/account/join_table"),{
+        type: 'POST',
+        data: formData,
+        context: personal_form,
+        success: function(result){
+
+        }
+
+    })
+
+})
+
 $('#edit_player_info').hide();
 $('#edit_player_button').on('click', function(){
     $('#player_info').hide();
@@ -113,7 +131,7 @@ var data = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(220,220,220,1)",
-            data: [65, 59, 80, 81, 56, 55, 40]
+            data: [2501, 1129, 801, 281, 516, 535, 1120,165, 1129, 1110, 1121, 1116, 1355, 3120]
         },
         {
             label: "Blitz",
@@ -123,7 +141,7 @@ var data = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [28, 48, 40, 19, 86, 27, 90]
+            data: [2218, 2118, 2230, 1129, 216, 2127, 2190, 1265, 1259, 2280, 1181, 561, 535, 1232]
         },
         {
             label: "Bullet",
@@ -133,7 +151,7 @@ var data = {
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(151,187,205,1)",
-            data: [21, 21, 4, 11, 82, 21, 11]
+            data: [2100, 2100, 400, 1011, 822, 2111, 1001, 2191, 2311, 400, 1111, 112, 2311, 1001]
         }
 
     ]
