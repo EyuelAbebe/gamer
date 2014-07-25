@@ -1,5 +1,5 @@
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
 from .models import Player, Match
 from django.contrib.auth.models import User
 from .forms import PlayerForm, UserForm, SignUpForm
@@ -7,7 +7,10 @@ from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 import django.dispatch
-
+from django.views.decorators.csrf import csrf_exempt
+import json
+from board import Board
+import engine
 
 def Login(request):
 
@@ -27,6 +30,7 @@ def Login(request):
 
 
     return HttpResponseRedirect(reverse('auth_login'))
+
 
 
 def signUp(request):
@@ -52,6 +56,40 @@ def home_page(request):
     return render_to_response('user_profile/home_page.html',
                               locals(),
                               context_instance=RequestContext(request))
+
+
+def start_table(request):
+
+    return render_to_response('user_profile/start_table.html',
+                              context_instance={})
+
+@csrf_exempt
+def make_move(request):
+    # print str(request.POST['position'])
+    m = engine.Match()
+    pos = request.POST['position']
+    pos = pos.replace('2', '11')
+    pos = pos.replace('3', '111')
+    pos = pos.replace('4', '1111')
+    pos = pos.replace('5', '11111')
+    pos = pos.replace('6', '111111')
+    pos = pos.replace('7', '1111111')
+    pos = pos.replace('8', '11111111')
+    # import pdb; pdb.set_trace()
+    new_move, won = m._play_web(
+        pos,
+        str(request.POST['move']),
+        True)
+    # old_board = Board(request.POST['position'])
+    # old_board.set_board(str(request.POST['move']))
+    # new_move = old_board.board
+    response = {'moves': new_move}
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+def get_player_from_match(player_id):
+
+    pass
 
 
 def history_page(request):

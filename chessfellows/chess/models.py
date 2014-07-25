@@ -39,6 +39,9 @@ class Match(models.Model):
         return self.game_type
 
 
+    class Meta:
+        verbose_name_plural="Matches"
+
 class Player(models.Model):
     user = models.OneToOneField(User)
     age = models.PositiveIntegerField(max_length=4, default=0)
@@ -119,4 +122,14 @@ class Player(models.Model):
         super(Player, self).save(*args, **kwargs)
 
 
+class Boards(models.Model):
+    white = models.ForeignKey(User, related_name="Wht")
+    black = models.ForeignKey(User, related_name="Blck")
+    state = models.CharField(max_length=100)
+    id = models.CharField(max_length=100, primary_key=True, unique=True, default="")
+    turn = models.BooleanField(default=True)
 
+    def save(self, *args, **kwargs):
+        if self.id == "":
+            self.id = str(self.white) + "-" + str(self.black)
+        super(Boards, self)._save(*args, **kwargs)
