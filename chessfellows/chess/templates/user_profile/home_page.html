@@ -8,20 +8,19 @@
 
     <div class="col-md-10" >
         <ul class="nav nav-tabs" id="myTab">
-          <li><a href="#personal" data-toggle="tab"> Home</a></li>
-          <li><a href="#stats" data-toggle="tab"> Universal Rating</a></li>
+          <li><a href="#u_rating" data-toggle="tab"> Universal Rating</a></li>
+          <li><a href="#all_matches" data-toggle="tab"> Live Matches </a></li>
+          <li><a href="#all_players" data-toggle="tab"> Current Logged In Players</a></li>
+          <li><a href="#chat" data-toggle="tab">Chat Room</a></li>
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane" id="personal">
-                    <div class="col-md-7">
-
-                    </div>
+            <div class="tab-pane" id="all_players">
 
                     <!-- Table -->
-                    <div class="all_players col-md-5">
+                    <div class="all_players col-md-4">
                          <div class="panel-body">
-                            <p> All Available Players</p>
+                            <p> Regular Game</p>
                           </div>
                           <table class="table table-striped table-bordered table-condensed table-hover scrollable">
                             <thead>
@@ -30,14 +29,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ player.user.username }}</td>
-                                </tr>
-
+                                {% for player in advanced %}
+                                    <tr>
+                                        <td class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
                             </tbody>
                           </table>
 
+                        <hr>
                            <table class="table table-striped table-bordered table-condensed table-hover scrollable">
                             <thead>
                                 <tr>
@@ -45,14 +46,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ player.user.username }}</td>
-                                </tr>
-
+                                {% for player in intermediate %}
+                                    <tr>
+                                        <td class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
                             </tbody>
                           </table>
-
+                        <hr>
                            <table class="table table-striped table-bordered table-condensed table-hover scrollable">
                             <thead>
                                 <tr>
@@ -60,9 +62,119 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                {% for player in beginner %}
+                                    <tr>
+                                        <td  class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+
+                            </tbody>
+                          </table>
+
+                    </div>
+                    <div class="all_players col-md-4">
+                         <div class="panel-body">
+                            <p> Blitz Game</p>
+                          </div>
+                          <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
                                 <tr>
-                                    <td>{{ player.user.username }}</td>
+                                    <th>Advanced Level Players</th>
                                 </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in advanced %}
+                                    <tr>
+                                        <td class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        <hr>
+                           <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Intermediate Level Players</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in intermediate %}
+                                    <tr>
+                                        <td class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        <hr>
+                           <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Beginner Level Players</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in beginner %}
+                                    <tr>
+                                        <td class= "player" data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+
+                            </tbody>
+                          </table>
+
+                    </div>
+                    <div class="all_players col-md-4">
+                         <div class="panel-body">
+                            <p> Bullet Game</p>
+                          </div>
+                          <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Advanced Level Players</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in advanced %}
+                                    <tr>
+                                        <td data-username="{{ player.user.username }}">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        <hr>
+                           <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Intermediate Level Players</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in intermediate %}
+                                    <tr>
+                                        <td data-username="{{ player.user.username }}">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        <hr>
+                           <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Beginner Level Players</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for player in beginner %}
+                                    <tr>
+                                        <td data-username="{{ player.user.username }}" onclick="request_game(this)">{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
 
                             </tbody>
@@ -72,7 +184,7 @@
 
             </div>
 
-            <div class="tab-pane" id="stats">
+            <div class="tab-pane" id="u_rating">
                           <div class="panel-body">
                             <p> All registered users and their ratings are listed below.</p>
                           </div>
@@ -107,6 +219,41 @@
                           </table>
 
             </div>
+
+            <div class="tab-pane" id="all_matches">
+
+                <div class="all_players col-md-12">
+                         <div class="panel-body">
+                            <p> Matches in Progress</p>
+                          </div>
+                          <table class="table table-striped table-bordered table-condensed table-hover scrollable">
+                            <thead>
+                                <tr>
+                                    <th>Table Number</th>
+                                    <th>White Player</th>
+                                    <th>Black Player</th>
+                                    <th>Game Type</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for match in all_matches %}
+
+                                    <tr>
+                                        <td data-id="{{ match.pk }}">{{ match.pk }}</td>
+                                        <td data-id="{{ match.white.username }}">{{ match.white.username }}</td>
+                                        <td data-id="{{ match.black.username }}">{{ match.black.username }}</td>
+                                        <td data-id="{{ match.game_type}}">{{ match.game_type }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+
+                    </div>
+
+            </div>
+
+            <div class="tab-pane" id="chat"></div>
         </div>
 
 

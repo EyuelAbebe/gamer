@@ -16,7 +16,6 @@ class Common(Configuration):
     import os
     BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -25,9 +24,7 @@ class Common(Configuration):
 
     ALLOWED_HOSTS = []
 
-
     # Application definition
-
     INSTALLED_APPS = (
         'django.contrib.admin',
         'django.contrib.auth',
@@ -58,7 +55,6 @@ class Common(Configuration):
 
     WSGI_APPLICATION = 'chessfellows.wsgi.application'
 
-
     # Database
     # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
@@ -86,7 +82,6 @@ class Common(Configuration):
 
     USE_TZ = True
 
-
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
@@ -106,10 +101,10 @@ class Common(Configuration):
     ACCOUNT_ACTIVATION_DAYS = 7
     CHATROOMS_HANDLERS_CLASS = 'chatrooms.utils.handlers.MessageHandler'
 
+
 class Dev(Common):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
-
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',

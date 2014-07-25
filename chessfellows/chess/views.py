@@ -3,7 +3,7 @@ from django.shortcuts import (
     render_to_response, get_object_or_404, render,
     HttpResponseRedirect, HttpResponse
     )
-from .models import Player, Match
+from .models import Player, Match, Logedin
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import engine
 from django.contrib.auth.models import User
+# from django.db.models import Q
 
 loged_in_players = []
 
@@ -19,7 +20,9 @@ loged_in_players = []
 def Login(request):
 
     if request.user.is_authenticated():
-        loged_in_players.append(request.user)
+        p = Player(user=request.user)
+        logged_player = Logedin(player=p)
+        logged_player.save()
         return HttpResponseRedirect(reverse('profile'))
 
     if request.method == 'POST':
@@ -62,10 +65,21 @@ def landing(request):
 
 def home_page(request):
     all_players = Player.objects.all()
-    return render_to_response(
-        'user_profile/home_page.html', locals(),
-        context_instance=RequestContext(request)
-        )
+    beginner, intermediate, advanced = [], [], []
+    live_games = []
+    logged_in_players = Logedin.objects.all()
+    all_matches = Match.objects.filter(in_progress__exact=1)
+    for user_ in logged_in_players:
+        p = Player.objects.get(user=user_)
+        if p.reg_rating <= 1200:
+            beginner.append(p)
+        elif 1201 < p.reg_rating < 1750:
+            intermediate.append(p)
+        else:
+            advanced.append(p)
+    return render_to_response('user_profile/home_page.html',
+                              locals(),
+                              context_instance=RequestContext(request))
 
 
 def start_table(request):
@@ -147,11 +161,9 @@ def make_move(request):
 
 
 def history_page(request):
-    all_players = loged_in_players
-    return render_to_response(
-        'user_profile/history_page.html', locals(),
-        context_instance=RequestContext(request)
-        )
+    return render_to_response('user_profile/history_page.html',
+                              locals(),
+                              context_instance=RequestContext(request))
 
 
 def update_user(request):

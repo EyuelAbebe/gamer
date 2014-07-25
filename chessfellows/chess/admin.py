@@ -1,5 +1,5 @@
 from django.contrib import admin
-from chess.models import Match, Player
+from chess.models import Match, Player, Logedin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -19,7 +19,6 @@ class MatchAdmin(admin.ModelAdmin):
 
 
 class PlayerAdmin(admin.ModelAdmin):
-
     model = Player
     list_display = ('user',
                     'reg_rating',
@@ -46,7 +45,14 @@ class PlayerInLine(admin.StackedInline):
 class UserAdmin(UserAdmin):
     inlines = (PlayerInLine, )
 
+
+class LogedinAdmin(admin.ModelAdmin):
+    model = Logedin()
+    list_display = ('player',)
+
+
 admin.site.register(Match, MatchAdmin)
 admin.site.register(Player, PlayerAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Logedin, LogedinAdmin)

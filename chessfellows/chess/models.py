@@ -39,6 +39,7 @@ class Match(models.Model):
     current_move = models.CharField(max_length=5, blank=True)
     current_state = models.CharField(max_length=72, blank=True)
     white_turn = models.BooleanField(default=True)
+    in_progress = models.PositiveIntegerField(default=0)
 
     def __unicode__(self):
         return self.game_type
@@ -79,6 +80,7 @@ class Player(models.Model):
     bu_losses = models.PositiveIntegerField(default=0)
     bu_draws = models.PositiveIntegerField(default=0)
     matches = models.ManyToManyField(Match, related_name="Player", blank=True)
+    in_match = models.PositiveIntegerField(default=0)
     all_opponents_rating = models.PositiveIntegerField(default=0)
     photo = models.ImageField(upload_to=get_file_owner_username,
                               blank=True)
@@ -133,3 +135,9 @@ class Player(models.Model):
         self.bl_rating = self.calc_bu_rating()
         self.bu_rating = self.calc_bl_rating()
         super(Player, self).save(*args, **kwargs)
+
+
+class Logedin(models.Model):
+    player = models.OneToOneField(Player,
+                                  related_name='a_player',
+                                  blank=True)

@@ -19,7 +19,7 @@
         </div>
             <div class="tab-pane" id="stats">
                           <div class="panel-body">
-                            <p> List of all Matches</p>
+                            <p>  Matches Played against Opponents</p>
                           </div>
 
                           <!-- Table -->
@@ -29,9 +29,9 @@
                                     <th>Username</th>
                                     <th>Country</th>
                                     <th>Age</th>
-                                    <th>Regular Ratings</th>
-                                    <th>Blitz Ratings</th>
-                                    <th>Bullet Ratings</th>
+                                    <th>Regular (W, L, D)</th>
+                                    <th>Blitz (W, L, D)</th>
+                                    <th>Bullet (W, L, D)</th>
 
                                 </tr>
                             </thead>
@@ -42,9 +42,9 @@
                                     <td>{{ player.user.username }}</td>
                                     <td>{{ player.country }}</td>
                                     <td>{{ player.age }}</td>
-                                    <td>{{ player.reg_rating }}</td>
-                                    <td>{{ player.bl_rating }}</td>
-                                    <td>{{ player.bu_rating }}</td>
+                                    <td>( {{ player.reg_wins }}, {{ player.reg_losses }}, {{ player.reg_draws }} )</td>
+                                    <td>( {{ player.bl_wins }}, {{ player.bl_losses }}, {{ player.bl_draws }} )}</td>
+                                    <td>{( {{ player.bu_wins }}, {{ player.bu_losses }}, {{ player.bu_draws }} )</td>
                                 </tr>
                             {% endfor %}
 
