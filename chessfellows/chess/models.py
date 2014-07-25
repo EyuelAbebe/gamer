@@ -27,6 +27,8 @@ def get_file_owner_username(instance, filename):
     return path
 
 
+
+
 class Match(models.Model):
     white = models.ForeignKey(User, related_name="White")
     black = models.ForeignKey(User, related_name="Black")
@@ -133,3 +135,10 @@ class Boards(models.Model):
         if self.id == "":
             self.id = str(self.white) + "-" + str(self.black)
         super(Boards, self)._save(*args, **kwargs)
+
+
+
+class Logedin(models.Model):
+    player = models.OneToOneField(Player,
+                                  related_name='a_player',
+                                  blank=True)

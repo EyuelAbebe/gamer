@@ -1,6 +1,6 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
-from .models import Player, Match
+from .models import Player, Match, Logedin
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
 from django.contrib.auth import authenticate, login
@@ -9,12 +9,13 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import engine
 
-loged_in_players= []
 
 def Login(request):
 
     if request.user.is_authenticated():
-        loged_in_players.append(request.user)
+        p = Player(user=request.user)
+        logged_player = Logedin(player=p)
+        logged_player.save()
         return HttpResponseRedirect(reverse('profile'))
 
     if request.method == 'POST':
@@ -57,6 +58,18 @@ def landing(request):
 
 def home_page(request):
     all_players = Player.objects.all()
+    beginner, intermediate, advanced = [], [], []
+
+    # import pdb; pdb.set_trace()
+    logged_in_players = Logedin.objects.all()
+    for user_ in logged_in_players:
+        p = Player.object.get(user=user_)
+        if p.rating <= 1200:
+            beginner.append(p)
+        elif 1201 < p.rating < 1750:
+            intermediate.append(p)
+        else:
+            advanced.append(p)
     return render_to_response('user_profile/home_page.html',
                               locals(),
                               context_instance=RequestContext(request))
@@ -96,9 +109,7 @@ def get_player_from_match(player_id):
 
 
 def history_page(request):
-    all_players = loged_in_players
     return render_to_response('user_profile/history_page.html',
-                              locals(),
                               context_instance=RequestContext(request))
 
 

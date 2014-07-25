@@ -30,10 +30,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ player.user.username }}</td>
-                                </tr>
-
+                                {% for player in advanced %}
+                                    <tr>
+                                        <td>{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
                             </tbody>
                           </table>
@@ -45,10 +46,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ player.user.username }}</td>
-                                </tr>
-
+                                {% for player in intermediate %}
+                                    <tr>
+                                        <td>{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
                             </tbody>
                           </table>
@@ -60,9 +62,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>{{ player.user.username }}</td>
-                                </tr>
+                                {% for player in beginner %}
+                                    <tr>
+                                        <td>{{ player.user.username }}</td>
+                                    </tr>
+                                {% endfor %}
 
 
                             </tbody>
