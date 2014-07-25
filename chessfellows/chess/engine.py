@@ -306,12 +306,10 @@ class Match(object):
             self.board[i] = SimpleUnit(i, 'white')
 
     def _add_starting_units(self):
-        black_units = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
-        white_units = black_units[::-1]
-        for i, unit in enumerate(black_units):
+        units = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
+        for i, unit in enumerate(units):
             self.board[(MIN_X + i, MAX_Y)] = unit((MIN_X + i, MAX_Y), 'black')
             self.board[(MIN_X + i, MAX_Y - 1)] = Pawn((MIN_X + i, MAX_Y - 1), 'black')
-        for i, unit in enumerate(white_units):
             self.board[(MIN_X + i, MIN_Y)] = unit((MIN_X + i, MIN_Y), 'white')
             self.board[(MIN_X + i, MIN_Y + 1)] = Pawn((MIN_X + i, MIN_Y + 1), 'white')
 

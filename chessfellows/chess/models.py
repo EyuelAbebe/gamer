@@ -17,18 +17,20 @@ def get_file_owner_username(instance, filename):
 
 class Match(models.Model):
     white = models.ForeignKey(User, related_name="White")
-    black = models.ForeignKey(User, related_name="Black")
-    moves = models.TextField()
+    black = models.ForeignKey(User, related_name="Black", blank=True)
+    moves = models.TextField(blank=True)
     date_played = models.DateTimeField(auto_now=True, blank=True)
-    winner = models.CharField(max_length=10, default='white')
-    game_type = models.IntegerField(choices=game_type_choices)
+    winner = models.CharField(max_length=10, blank=True)
+    game_type = models.IntegerField(choices=game_type_choices, default=0)
+    current_move = models.CharField(max_length=5, blank=True)
+    white_turn = models.BooleanField(default=True)
 
     def __unicode__(self):
         return self.game_type
 
-
     class Meta:
-        verbose_name_plural="Matches"
+        verbose_name_plural = "Matches"
+
 
 class Player(models.Model):
     user = models.OneToOneField(User)
@@ -110,14 +112,14 @@ class Player(models.Model):
         super(Player, self).save(*args, **kwargs)
 
 
-class Boards(models.Model):
-    white = models.ForeignKey(User, related_name="Wht")
-    black = models.ForeignKey(User, related_name="Blck")
-    state = models.CharField(max_length=100)
-    id = models.CharField(max_length=100, primary_key=True, unique=True, default="")
-    turn = models.BooleanField(default=True)
+# class Boards(models.Model):
+#     white = models.ForeignKey(User, related_name="Wht")
+#     black = models.ForeignKey(User, related_name="Blck")
+#     state = models.CharField(max_length=100)
+#     id = models.CharField(max_length=100, primary_key=True, unique=True, default="")
+#     turn = models.BooleanField(default=True)
 
-    def save(self, *args, **kwargs):
-        if self.id == "":
-            self.id = str(self.white) + "-" + str(self.black)
-        super(Boards, self)._save(*args, **kwargs)
+#     def save(self, *args, **kwargs):
+#         if self.id == "":
+#             self.id = str(self.white) + "-" + str(self.black)
+#         super(Boards, self)._save(*args, **kwargs)

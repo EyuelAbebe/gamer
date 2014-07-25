@@ -36,14 +36,45 @@ def home_page(request):
 
 
 def start_table(request):
-
+    black = User.objects.get(pk=6)
+    m = Match(white=request.user, black=black)
+    m.save()
     return render_to_response('user_profile/start_table.html',
                               context_instance={})
 
+# @csrf_exempt
+# def make_move(request):
+#     m = engine.Match()
+#     pos = request.POST['position']
+#     pos = pos.replace('2', '11')
+#     pos = pos.replace('3', '111')
+#     pos = pos.replace('4', '1111')
+#     pos = pos.replace('5', '11111')
+#     pos = pos.replace('6', '111111')
+#     pos = pos.replace('7', '1111111')
+#     pos = pos.replace('8', '11111111')
+#     new_move, won = m._play_web(
+#         pos,
+#         str(request.POST['move']),
+#         True)
+#     response = {'moves': new_move}
+#     return HttpResponse(json.dumps(response), mimetype="application/json")
+
 @csrf_exempt
 def make_move(request):
-    # print str(request.POST['position'])
-    m = engine.Match()
+    u"""Return state of a match after a move.
+
+    Accept:
+    Match id:
+    position: Board state as 71 character string.
+    move: Proposed move as 5 charcter string
+
+    Instantiate a Match()
+    """
+    # Convert position from format sent by the front end to format
+    # expected by the engine.
+    # import pdb; pdb.set_trace()
+    print request.user
     pos = request.POST['position']
     pos = pos.replace('2', '11')
     pos = pos.replace('3', '111')
@@ -52,15 +83,65 @@ def make_move(request):
     pos = pos.replace('6', '111111')
     pos = pos.replace('7', '1111111')
     pos = pos.replace('8', '11111111')
-    # import pdb; pdb.set_trace()
-    new_move, won = m._play_web(
-        pos,
-        str(request.POST['move']),
-        True)
-    # old_board = Board(request.POST['position'])
-    # old_board.set_board(str(request.POST['move']))
-    # new_move = old_board.board
-    response = {'moves': new_move}
+    move = str(request.POST['move'])
+    requester = request.user
+    # Get match by id
+    match_id = 7
+    # Get turn from match (Boolean value representing white's move)
+    match = Match.objects.get(pk=match_id)
+    white_player = match.white
+    black_player = match.black
+    white_turn = match.white_turn
+    new_pos = None
+    if black_player is None:
+        match.black, black_player = requester, requester
+        match.save()
+    if (white_turn and requester == white_player) or \
+       (not white_turn and requester == black_player):
+        # Instantiate a Match to verify move validity
+        m = engine.Match()
+
+        new_pos, won = m._play_web(
+            pos,
+            move,
+            white_turn)
+        if new_pos != pos:
+            move_history = match.moves
+            move_history += ";" + move
+            match.moves = move_history
+            match.current_move = move
+            match.white_turn = not white_turn
+            match.save()
+            print "saved!"
+    elif requester == white_player or requester == black_player:
+        # Need to either store the full current state of the board in
+        # the DB or we have to reassemble the entire game one step at a
+        # time.
+        print "elif"
+        m = engine.Match()
+        m._add_starting_units()
+        pos = m._board_to_str()
+        new_pos = None
+        moves = match.moves
+        move_list = moves.split(";")
+        print move_list
+        white_turn = True
+        import pdb; pdb.set_trace()
+        for move in move_list[1:]:
+            print "Starting for loop"
+            print move
+            if new_pos is not None:
+                pos = new_pos
+                print pos
+            new_pos, won = m._play_web(
+                pos,
+                move,
+                white_turn)
+            print new_pos
+            white_turn = not white_turn
+    if new_pos is None:
+      new_pos = pos
+    response = {'moves': new_pos}
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
