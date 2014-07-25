@@ -8,7 +8,10 @@ class MatchAdmin(admin.ModelAdmin):
     list_display = ('white',
                     'black',
                     'date_played',
-                    'winner')
+                    'winner',
+                    'moves',
+                    "white_turn",
+                    "pk",)
 
     list_filter = ('date_played',)
 

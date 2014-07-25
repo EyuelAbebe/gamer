@@ -17,6 +17,8 @@ class Migration(SchemaMigration):
             ('date_played', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('winner', self.gf('django.db.models.fields.CharField')(default='white', max_length=10)),
             ('game_type', self.gf('django.db.models.fields.IntegerField')()),
+            ('current_move', self.gf('django.db.models.fields.CharField')(max_length=5)),
+            ('white_turn', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal(u'chess', ['Match'])
 
@@ -98,11 +100,13 @@ class Migration(SchemaMigration):
         u'chess.match': {
             'Meta': {'object_name': 'Match'},
             'black': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'Black'", 'to': u"orm['auth.User']"}),
+            'current_move': ('django.db.models.fields.CharField', [], {'max_length': '5'}),
             'date_played': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'game_type': ('django.db.models.fields.IntegerField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'moves': ('django.db.models.fields.TextField', [], {}),
             'white': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'White'", 'to': u"orm['auth.User']"}),
+            'white_turn': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'winner': ('django.db.models.fields.CharField', [], {'default': "'white'", 'max_length': '10'})
         },
         u'chess.player': {
