@@ -1,0 +1,11 @@
+{% extends "user_profile/profile_base.html" %}
+{% load staticfiles %}
+
+{% block profile %}
+        <div class="col-md-10" >
+            <p>Match in Progress </p>
+            <div id="progress_board" data-value="{{ match_table.pk }}" style="width: 400px"></div>
+
+            <script src="{% static 'js/join_table.js' %}"></script>
+        </div>
+{% endblock %}

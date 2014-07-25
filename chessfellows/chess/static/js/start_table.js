@@ -4,6 +4,9 @@ var board = new ChessBoard('board', {
   dropOffBoard: 'trash',
   sparePieces: false
 });
+
+
+
 $('#startBtn').on('click', function() {
     board.position(x)
 });
@@ -34,3 +37,4 @@ var cfg = {
 };
 
 var board = new ChessBoard('board', cfg);
+

@@ -238,12 +238,13 @@
                             <tbody>
                                 {% for match in all_matches %}
 
-                                    <tr>
-                                        <td data-id="{{ match.pk }}">{{ match.pk }}</td>
+                                    <tr class="game">
+                                        <td data-id="{{ match.pk }}"><a href="{% url 'join_table' match.pk  %}">{{ match.pk }}</a></td>
                                         <td data-id="{{ match.white.username }}">{{ match.white.username }}</td>
                                         <td data-id="{{ match.black.username }}">{{ match.black.username }}</td>
                                         <td data-id="{{ match.game_type}}">{{ match.game_type }}</td>
                                     </tr>
+
                                 {% endfor %}
 
                             </tbody>

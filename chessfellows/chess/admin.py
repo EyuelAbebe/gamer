@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class MatchAdmin(admin.ModelAdmin):
-
+    model = Match
     list_display = ('white',
                     'black',
                     'date_played',
@@ -16,6 +16,7 @@ class MatchAdmin(admin.ModelAdmin):
                     "current_state",)
 
     list_filter = ('date_played',)
+
 
 
 class PlayerAdmin(admin.ModelAdmin):
@@ -47,7 +48,7 @@ class UserAdmin(UserAdmin):
 
 
 class LogedinAdmin(admin.ModelAdmin):
-    model = Logedin()
+    model = Logedin
     list_display = ('player',)
 
 

@@ -90,6 +90,16 @@ def start_table(request):
         'user_profile/start_table.html', context_instance={}
         )
 
+    return render_to_response('user_profile/start_table.html',
+                              context_instance=RequestContext(request))
+
+def join_table(request, match_id):
+
+    match_table = Match.objects.get(pk=match_id)
+    current_moves = match_table.moves
+    return render_to_response('user_profile/join_table.html',
+                              locals(),
+                              context_instance=RequestContext(request))
 
 @csrf_exempt
 def make_move(request, match_id):
@@ -161,6 +171,19 @@ def make_move(request, match_id):
         # print "elif"
     response = {'moves': new_pos}
 
+@csrf_exempt
+def join_table_moves(request):
+    match_id = request.GET['match_id']
+    match_table = Match.objects.get(pk=int(match_id))
+
+    move = match_table.moves
+    response = {'moves': move}
+
+    return HttpResponse(json.dumps(response), mimetype="application/json")
+
+
+
+def get_player_from_match(player_id):
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
