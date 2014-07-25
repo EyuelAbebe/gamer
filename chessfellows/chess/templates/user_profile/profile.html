@@ -20,9 +20,13 @@
                             <div class="panel-body">
                                     <div class="row" >
                                       <div class="col-xs-12 col-sm-4 text-center" id="player_info">
+                                                {% if player.photo %}
+                                                <img src="{{ player.photo }}" alt="" class="center-block img-circle img-responsive">
+                                                {% else %}
                                                 <img src="../../static/img/default_user_photo.jpg" alt="" class="center-block img-circle img-responsive">
-                                                          <h6>Age: {{ player.age }}</h6>
-                                                          <h6>Country: {{ player.country }}</h6>
+                                                {% endif %}
+                                                          <h5><strong>Age: {{ player.age }}</strong></h5>
+                                                          <h5><strong>Country: {{ player.country }}</strong></h5>
                                                 <button id ="edit_player_button"class="btn btn-success btn-group-sm"><i class="icon-white icon-heart"></i> Edit profile Information </button>
                                       </div><!--/col-->
 
@@ -40,7 +44,7 @@
 
                                             {# Display a form #}
 
-                                            <form method="post" class="form" id="save_photo_info">{% csrf_token %}
+                                            <form enctype="multipart/form-data" method="post" class="form" id="save_photo_info">{% csrf_token %}
                                               {% bootstrap_form player_form %}
                                               {% bootstrap_form_errors player_form layout='inline' %}
                                                 <div class="form-group">

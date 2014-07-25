@@ -28,7 +28,7 @@ $('#save_personal_info').on('submit', function(event){
     var personal_form = $(event.target);
     var formData = personal_form.serialize()
 
-    $.ajax(("/accounts/updateUserInfo/"),{
+    $.ajax(("/updateUserInfo/"),{
         type: 'POST',
         data: formData,
         context: personal_form,
@@ -59,32 +59,13 @@ $('#save_photo_info').on('submit', function(event){
     var personal_form = $(event.target);
     var formData = personal_form.serialize()
 
-    $.ajax(("/accounts/updatePlayerInfo/"),{
+    $.ajax(("/updatePlayerInfo/"),{
         type: 'POST',
         data: formData,
         context: personal_form,
         success: function(result){
             $('#edit_player_info').hide();
             $('#player_info').show();
-        }
-
-    })
-
-})
-
-
-
-$('#signup').on('submit', function(event){
-    event.preventDefault();
-    var personal_form = $(event.target);
-    var formData = personal_form.serialize()
-
-    $.ajax(("/accounts/signUp/"),{
-        type: 'POST',
-        data: formData,
-        context: personal_form,
-        success: function(result){
-
         }
 
     })

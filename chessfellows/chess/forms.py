@@ -4,7 +4,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms import widgets
 
 
-class SignUpForm(UserCreationForm):
+class Sign_Up_FormControl(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(Sign_Up_FormControl, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'input-mini'
+
+class SignUpForm(Sign_Up_FormControl):
     username = forms.CharField(required=True)
     email = forms.EmailField(required=True)
     first_name = forms.CharField(required=False)
@@ -30,14 +36,14 @@ class User_FormControl(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(User_FormControl, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = 'input-mini'
 
 
 class Profile_FormControl(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(Profile_FormControl, self).__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'input-mini'
+            field.widget.attrs['class'] = 'form-control'
 
 
 class UserForm(User_FormControl):

@@ -1,38 +1,66 @@
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, render, HttpResponseRedirect, HttpResponse
 from .models import Player, Match
-from django.contrib.auth.models import User
 from .forms import PlayerForm, UserForm, SignUpForm
 from django.core.context_processors import csrf
+from django.contrib.auth import authenticate, login
+from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-from board import Board
 import engine
+from django.contrib.auth.models import User
+
+loged_in_players= []
+
+def Login(request):
+
+    if request.user.is_authenticated():
+        loged_in_players.append(request.user)
+        return HttpResponseRedirect(reverse('profile'))
+
+    if request.method == 'POST':
+
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user_ = authenticate(username=username, password=password)
+        if user_ is not None:
+            login(request, user_)
+
+            return HttpResponseRedirect(reverse('home'))
+
+
+    return HttpResponseRedirect(reverse('auth_login'))
+
+
 
 def signUp(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/accounts/register_success')
+            return HttpResponseRedirect('/register_success/')
     args = {}
     args.update(csrf(request))
     args['form'] = SignUpForm()
     print args
-    return render(request, 'register.html', args)
+    return render(request, 'registration/registration_form.html', args)
 
 
 def landing(request):
+
+    if request.user.is_authenticated():
+        return HttpResponseRedirect(reverse('home'))
+
     sign_up_form = SignUpForm()
-    context = {}
-    return render(request, 'chess/landing.html', locals())
+    return render(request, 'chess/landing.html', locals(), context_instance=RequestContext(request))
 
 
 def home_page(request):
-    print str(request)
+    all_players = Player.objects.all()
     return render_to_response('user_profile/home_page.html',
-                              context_instance={})
+                              locals(),
+                              context_instance=RequestContext(request))
 
 
 def start_table(request):
@@ -126,7 +154,7 @@ def make_move(request):
         move_list = moves.split(";")
         print move_list
         white_turn = True
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         for move in move_list[1:]:
             print "Starting for loop"
             print move
@@ -140,7 +168,7 @@ def make_move(request):
             print new_pos
             white_turn = not white_turn
     if new_pos is None:
-      new_pos = pos
+        new_pos = pos
     response = {'moves': new_pos}
     return HttpResponse(json.dumps(response), mimetype="application/json")
 
@@ -151,8 +179,10 @@ def get_player_from_match(player_id):
 
 
 def history_page(request):
+    all_players = loged_in_players
     return render_to_response('user_profile/history_page.html',
-                              context_instance={})
+                              locals(),
+                              context_instance=RequestContext(request))
 
 
 def update_user(request):
@@ -168,14 +198,16 @@ def update_user(request):
 
 
 def update_player(request):
+    player = get_object_or_404(Player, user=request.user)
     if request.method == "POST":
-        form = PlayerForm(request.POST, request.FILES)
+        form = PlayerForm(request.POST, request.FILES, instance=player)
+
         if form.is_valid():
             form.save()
     else:
         form = UserForm(instance=request.user)
 
-    return HttpResponseRedirect('/accounts/home/')
+    return HttpResponseRedirect(reverse('home'))
 
 
 def profile_page(request):

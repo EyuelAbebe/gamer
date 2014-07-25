@@ -2,10 +2,12 @@
 {% load staticfiles %}
 
 {% block profile %}
+        <div class="col-md-10" >
 <p>START TABLE</p>
 <div id="board" style="width: 400px"></div>
 <input type="button" id="startBtn" value="Start" />
 <input type="button" id="clearBtn" value="Clear" />
 
 <script src="{% static 'js/start_table.js' %}"></script>
+            </div>
 {% endblock %}
